@@ -1,0 +1,26 @@
+{
+  "name": "cs361-group-project",
+  "version": "1.0.0",
+  "description": "Build a task management system similar to Asana",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1" 
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:sarahforest/cs361.git"
+  },
+  "author": "Sarah Forest, George Hill, Antonio Irizarry, Hsing-Yi Lin, Joshua New",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.13.3",
+    "express": "^4.13.2",
+    "express-handlebars": "^2.0.1",
+    "express-session": "^1.17.0",
+    "mysql": "^2.8.0"
+  },
+  "bugs": {
+    "url": "https://github.com/sarahforest/cs361/issues"
+  },
+  "homepage": "https://github.com/sarahforest/cs361#readme"
+}
