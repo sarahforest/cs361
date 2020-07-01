@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "node index.js"
+    "dev": "node index.js",
+    "dev-forever": "./node_modules/forever/bin/forever index.js"
   },
   "repository": {
     "type": "git",

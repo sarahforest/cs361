@@ -46,6 +46,8 @@ app.post('/add-new-user', function (req, res) {
             res.end();
           } else {
             var context = {};
+            //pass the id of the user inserted to the home page to load projects related to user
+            context.id = result.insertId;
             res.render('home', context);
           }
         });
