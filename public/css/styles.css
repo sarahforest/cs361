@@ -1,2 +1,6 @@
 /* here is the stylesheet */
 /* nominal change to create commit */
+
+#danger {
+    color: red;
+}
