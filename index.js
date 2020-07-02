@@ -1,9 +1,9 @@
 var express = require('express');
 var mysql = require('./dbcon.js');
 var bodyParser = require('body-parser');
-var bcrypt = require('bcrypt');
-const saltRounds = 10;
 
+
+var CryptoJS = require("crypto-js");
 var app = express();
 var path = require('path');
 var session = require('express-session');
@@ -28,6 +28,7 @@ app.get('/',function(req,res,next){
 });
 
 app.post('/add-new-user', function (req, res) {
+  
   mysql.pool.query("SELECT id from users where email=" + mysql.pool.escape(req.body.user_email),
   function(err,result) {
     // if error, handle by outputting issue encountered
@@ -44,9 +45,13 @@ app.post('/add-new-user', function (req, res) {
     } 
     // we have a new user password we need to hash then add to the db
     else {
-      bcrypt.hash(req.body.user_password, saltRounds).then(function(hash) {
+      
+
+      var ciphertext = CryptoJS.AES.encrypt(req.body.user_password, 'secret key 123').toString(); 
+      //console.log(ciphertext);
+
         mysql.pool.query("INSERT INTO users (name, email, password) VALUES (?,?,?)",
-        [req.body.full_name, req.body.user_email, hash],
+        [req.body.full_name, req.body.user_email, ciphertext],
         function(err,result) {
           if (err) {
             console.log(JSON.stringify(err));
@@ -58,7 +63,6 @@ app.post('/add-new-user', function (req, res) {
             res.redirect('home');
           }
         });
-      });
     }
   });
 });
