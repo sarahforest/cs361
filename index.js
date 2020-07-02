@@ -5,7 +5,15 @@ var bcrypt = require('bcrypt');
 const saltRounds = 10;
 
 var app = express();
-var path = require('path'); 
+var path = require('path');
+var session = require('express-session');
+
+app.use(session({
+  secret: '7C44-74D44-WppQ3877S',
+  resave: true,
+  saveUninitialized: true
+}));
+
 var handlebars = require('express-handlebars').create({defaultLayout:'main'});
 
 app.use(express.static(path.join(__dirname, '/public')));
@@ -45,15 +53,23 @@ app.post('/add-new-user', function (req, res) {
             res.write(JSON.stringify(err));
             res.end();
           } else {
-            var context = {};
             //pass the id of the user inserted to the home page to load projects related to user
-            context.id = result.insertId;
-            res.render('home', context);
+            req.session.userId = result.insertId;
+            res.redirect('home');
           }
         });
       });
     }
   });
+});
+
+
+app.get('/home',function(req,res,next){
+  var context = {};
+  //using the session rather than passing as a variable, will preserve across multiple pages this way
+  context.id=req.session.userId;
+  console.log(req.session)
+  res.render('home',context);
 });
 
 

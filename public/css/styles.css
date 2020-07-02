@@ -29,12 +29,16 @@ body {
     background: none;
     border: 1px solid #808080;
     border-radius: 0px;
-    width: 100%;
-    padding: 5px;
+    width: 96%;
+    padding: 10px;
 }
 
 #sign-up-page ul li {
     margin-bottom: 8px;
+}
+
+#sign_up_form .input-group:last-of-type {
+    margin-bottom: 30px;
 }
 
 #sign-up-page .button.button-block {
