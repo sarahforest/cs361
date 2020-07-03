@@ -22,9 +22,16 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.set('view engine', 'handlebars');
 app.set('port', process.argv[2]);
 
+app.use('/projects', require('./projects.js'));
+
 app.get('/',function(req,res,next){
   var context = {};
   res.render('signup',context);
+});
+
+app.get('/projects',function(req,res,next){
+  var context = {};
+  res.render('projects',context);
 });
 
 app.post('/add-new-user', function (req, res) {
@@ -66,6 +73,9 @@ app.post('/add-new-user', function (req, res) {
     }
   });
 });
+
+
+
 
 
 app.get('/home',function(req,res,next){
