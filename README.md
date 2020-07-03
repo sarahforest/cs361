@@ -16,3 +16,5 @@ CREATE TABLE `users` (
 `password` varchar(500) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ```
+
+Access user credential: req.session.userId
