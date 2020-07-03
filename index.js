@@ -71,12 +71,53 @@ app.post('/add-new-user', function (req, res) {
 app.get('/home',function(req,res,next){
   var context = {};
   //using the session rather than passing as a variable, will preserve across multiple pages this way
-  context.id=req.session.userId;
+  context.id = req.session.userId;
   console.log(req.session)
   res.render('home',context);
 });
 
+app.get('/login', function(req, res, next) {
+  const context = { email: '', password: '' };
+  res.render('login',context);
+});
 
+app.post('/user-login', function (req, res) {
+  mysql.pool.query("SELECT * from users where email=" + mysql.pool.escape(req.body.user_email),
+  function(err,result) {
+    // for re-rendering input values if login fails
+    const context = {
+      email: req.body.user_email,
+      password: req.body.user_password,
+    };
+
+    // if error, handle by outputting issue encountered
+    if (err) {
+      console.log(JSON.stringify(err));
+      res.write(JSON.stringify(err));
+      res.end();
+    } 
+    // email doesn't exist
+    else if (!result[0]) {
+      context.errors = 'Incorrect email or password';
+      res.status(401).render('login', context);
+    }
+    else {
+      var bytes  = CryptoJS.AES.decrypt(result[0].password, 'secret key 123');
+      var decryptedPw = bytes.toString(CryptoJS.enc.Utf8);
+      
+      // password incorrect
+      if (req.body.user_password !== decryptedPw) {
+        context.errors = 'Incorrect email or password';
+        res.status(401).render('login', context);
+      }
+      // valid credentials
+      else {
+        req.session.userId = result[0].id;
+        res.redirect('home');
+      }
+    }
+  });
+});
 
 app.use(function(req,res){
   res.status(404);

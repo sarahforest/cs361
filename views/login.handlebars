@@ -1,0 +1,33 @@
+<div id="login-page">
+	<div class="form-content">
+		<h1>Log In</h1>
+		{{#if errors}}
+					<div id='danger'>{{errors}}</div>
+		{{/if}}
+		<form action="/user-login" method="post" id="login_form">
+			<div class="input-group">
+				<label>Email</label>
+				<input 
+					name="user_email" 
+					id="userEmail" 
+					type="email" 
+					{{#if email}} value={{email}} {{/if}} 
+					required
+				/>
+			</div>
+			<div class="input-group">
+				<label>Password</label>
+				<input 
+					name="user_password" 
+					id="userPassword" 
+					type="password" 
+					{{#if password}} value={{password}} {{/if}} 
+					required
+				/>
+			</div>
+			<div class="input-group">
+				<input class="button button-block" type="submit" value="Log In" />
+			</div>
+		</form>
+	</div>
+</div>

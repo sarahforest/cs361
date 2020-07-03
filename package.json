@@ -4,8 +4,9 @@
   "description": "Build a task management system similar to Asana",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "node index.js",
+    "dev": "nodemon index.js",
     "dev-forever": "./node_modules/forever/bin/forever index.js"
   },
   "repository": {
@@ -25,5 +26,8 @@
   "bugs": {
     "url": "https://github.com/sarahforest/cs361/issues"
   },
-  "homepage": "https://github.com/sarahforest/cs361#readme"
+  "homepage": "https://github.com/sarahforest/cs361#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
 }

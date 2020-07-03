@@ -1,15 +1,13 @@
 /* here is the stylesheet */
 /* nominal change to create commit */
 /* trying to pull and push a change - ai */
-
-
 body {
     background-color: #fafafa;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: #525151;
 }
 /* sign up page CSS */
-#sign-up-page #danger {
+#login-page #danger {
     color: red;
 }
 
@@ -126,3 +124,60 @@ body {
     padding: 2% 5%;
 }
 
+/* sign up page CSS */
+#sign-up-page #danger {
+    color: red;
+}
+
+#login-page * {
+    box-sizing: border-box;
+}
+
+#login-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+#login-page .form-content {
+    width: 50%;
+    max-width: 600px;
+    background-color: white;
+    border-radius: 3px;
+    border: 1px solid #808080;
+    padding: 2% 5%;
+}
+
+#login-page label {
+    margin: 10px 0;
+    display: block;
+}
+
+#login-page input {
+    background: none;
+    border: 1px solid #808080;
+    border-radius: 0px;
+    width: 100%;
+    padding: 10px;
+}
+
+#login-page .button.button-block {
+    display: block;
+    margin-top: 20px;
+    background: #fcbd01;
+    border-color: #fcbd01;
+    color: #fff;
+    font-size: 0.9em;
+    font-weight: 900;
+    letter-spacing: 1px;
+}
+
+#login-page .button.button-block:hover {
+    background: #fcb101;
+    border-color: #fcb101;
+}
+
+#login_form .input-group:last-of-type {
+    margin-bottom: 30px;
+}
