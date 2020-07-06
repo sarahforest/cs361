@@ -29,12 +29,12 @@ app.get('/',function(req,res,next){
   res.render('signup',context);
 });
 
-/* Not being invoked
+
 app.get('/projects',function(req,res,next){
   var context = {};
   res.render('projects',context);
 });
-*/
+
 
 app.post('/add-new-user', function (req, res) {
   

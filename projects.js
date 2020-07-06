@@ -50,27 +50,18 @@ module.exports = function(){
     }
 
     // function that returns the entire list of users as a promise
-    function getUsers() {
+    function getUsers(context, complete) {
         var mysql = require('./dbcon.js');
-       
-        return new Promise((resolve) => {
             mysql.pool.query("SELECT id, name, email FROM users", function(error,results) {
                 if(error){
                     res.write(JSON.stringify(error));
                     res.end();
                 } else {
-                    resolve(results)
+                    context.users = results;
+                    complete();
                 }
             })
-        });
       }
-      // function that awaits the promise to resolve for the users list
-      // then renders the projects page upon result
-      async function renderProjectsPage(res,context) {
-        const result = await getUsers();
-        context.users = result;
-        res.render('projects', context);
-    }
  
     /* function to display all PROJECTS */
     function getProjects(res, mysql, context, complete){
@@ -95,8 +86,10 @@ module.exports = function(){
         getProjects(res, mysql, context, complete);
          function complete(){
             callbackCount++;
-            if(callbackCount >= 1){
-                renderProjectsPage(res,context);
+            if(callbackCount == 1){
+                getUsers(context, complete);
+            } else if (callbackCount >= 2) {
+                res.render('projects', context);
             }
         }
     });
