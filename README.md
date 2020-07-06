@@ -38,13 +38,3 @@ INSERT INTO `Projects` (`Project_ID`, `Project_Name`, `Due_Date`, `Status`) VALU
 (3, 'Music Manager',        '2021-03-19',   'Complete');
 
 Access user credential: req.session.userId
-
-
--- User_Projects Table -- 
-CREATE TABLE `user_projects` (
-  `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `project_id` int(11) NOT NULL,
-   FOREIGN KEY (user_id) REFERENCES users(id),
-   FOREIGN KEY (project_id) REFERENCES Projects(Project_ID)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;

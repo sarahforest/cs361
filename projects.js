@@ -15,12 +15,7 @@ module.exports = function(){
                 res.write(JSON.stringify(error));
                 res.end();
             }else{
-                if (results.insertId) {
-                    var projectId = results.insertId;
-                    var usersAssigned = req.body.user;
-                    updateProjectUsersTable(res, projectId, usersAssigned);
-                    //res.redirect('projects');
-                }
+                res.redirect('/projects');
             }
         });
     });
@@ -75,7 +70,6 @@ module.exports = function(){
             complete();
         });
     }
-      
 
     /* Display all PROJECTS */
     router.get('/', function(req, res){
@@ -95,7 +89,6 @@ module.exports = function(){
     });
 
     /* Route to DELETE specified Project */
-    // TODO: on delete, remove users where project_id = ? from user_projects table
     router.delete('/:id', function(req, res){
         // var mysql = req.app.get('mysql');
         var mysql = require('./dbcon.js');
