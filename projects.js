@@ -15,62 +15,10 @@ module.exports = function(){
                 res.write(JSON.stringify(error));
                 res.end();
             }else{
-                if (results.insertId) {
-                    var projectId = results.insertId;
-                    var usersAssigned = req.body.user;
-                    updateProjectUsersTable(res, projectId, usersAssigned);
-                    //res.redirect('projects');
-                }
+                res.redirect('/projects');
             }
         });
     });
-
-    // on project submit, add users to the user_projects table
-    function updateProjectUsersTable(res, projectId, usersAssigned) {
-        var mysql = require('./dbcon.js');
- 
-        var count = 0;
-        var lengthUsers = usersAssigned.length;
-        usersAssigned.forEach(function(userId) {
-            mysql.pool.query("INSERT INTO user_projects (user_id, project_id) VALUES (?,?)",
-            [userId, projectId],
-            function(err,result) {
-                if (err) {
-                    console.log(JSON.stringify(err));
-                    res.write(JSON.stringify(err));
-                    res.end();
-                } else {
-                    count++;
-                    if (count == lengthUsers) {
-                        res.redirect('projects');
-                    }
-                }
-            });
-        })
-    }
-
-    // function that returns the entire list of users as a promise
-    function getUsers() {
-        var mysql = require('./dbcon.js');
-       
-        return new Promise((resolve) => {
-            mysql.pool.query("SELECT id, name, email FROM users", function(error,results) {
-                if(error){
-                    res.write(JSON.stringify(error));
-                    res.end();
-                } else {
-                    resolve(results)
-                }
-            })
-        });
-      }
-      // function that awaits the promise to resolve for the users list
-      // then renders the projects page upon result
-      async function renderProjectsPage(res,context) {
-        const result = await getUsers();
-        context.users = result;
-        res.render('projects', context);
-    }
  
     /* function to display all PROJECTS */
     function getProjects(res, mysql, context, complete){
@@ -84,7 +32,6 @@ module.exports = function(){
             complete();
         });
     }
-      
 
     /* Display all PROJECTS */
     router.get('/', function(req, res){
@@ -96,13 +43,12 @@ module.exports = function(){
          function complete(){
             callbackCount++;
             if(callbackCount >= 1){
-                renderProjectsPage(res,context);
+                res.render('projects', context);
             }
         }
     });
 
     /* Route to DELETE specified Project */
-    // TODO: on delete, remove users where project_id = ? from user_projects table
     router.delete('/:id', function(req, res){
         // var mysql = req.app.get('mysql');
         var mysql = require('./dbcon.js');
