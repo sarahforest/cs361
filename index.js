@@ -29,10 +29,12 @@ app.get('/',function(req,res,next){
   res.render('signup',context);
 });
 
+/* Not being invoked
 app.get('/projects',function(req,res,next){
   var context = {};
   res.render('projects',context);
 });
+*/
 
 app.post('/add-new-user', function (req, res) {
   
@@ -67,7 +69,8 @@ app.post('/add-new-user', function (req, res) {
           } else {
             //pass the id of the user inserted to the home page to load projects related to user
             req.session.userId = result.insertId;
-            res.redirect('home');
+            // go straight to the projects page
+            res.redirect('projects');
           }
         });
     }
