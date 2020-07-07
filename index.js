@@ -21,51 +21,55 @@ app.set('port', process.argv[2]);
 
 app.use('/projects', require('./projects.js'));
 
-app.get('/',function(req,res,next){
+app.get('/', function(req, res, next) {
   var context = {};
   res.render('signup',context);
 });
 
-app.get('/projects',function(req,res,next){
+app.get('/projects', function(req, res, next) {
   var context = {};
   res.render('projects',context);
 });
 
-app.post('/add-new-user', function (req, res) {
-  
-  mysql.pool.query("SELECT id from users where email=" + mysql.pool.escape(req.body.user_email),
-  function(err,result) {
-    // if error, handle by outputting issue encountered
-    if (err) {
-      console.log(JSON.stringify(err));
-      res.write(JSON.stringify(err));
-      res.end();
-    } 
-    // if id exists in the db, user already exists, don't proceed with sign up
-    else if (result[0] && result[0].id) {
-      res.render('signup', {
-        errors: 'Email address already exists. Please login to your existing account or use a different email.',
-      });
-    } 
-    // we have a new user password we need to hash then add to the db
-    else {
-      var ciphertext = CryptoJS.AES.encrypt(req.body.user_password, 'secret key 123').toString(); 
-      //console.log(ciphertext);
-        mysql.pool.query("INSERT INTO users (name, email, password) VALUES (?,?,?)",
-        [req.body.full_name, req.body.user_email, ciphertext],
-        function(err,result) {
-          if (err) {
-            console.log(JSON.stringify(err));
-            res.write(JSON.stringify(err));
-            res.end();
-          } else {
-            //pass the id of the user inserted to the home page to load projects related to user
-            req.session.userId = result.insertId;
-            res.redirect('projects');
-          }
+app.post('/add-new-user', function(req, res) {
+  mysql.pool.query(
+    "SELECT id from users where email=" + mysql.pool.escape(req.body.user_email),
+    function(err, result) {
+      // if error, handle by outputting issue encountered
+      if (err) {
+        console.log(JSON.stringify(err));
+        res.write(JSON.stringify(err));
+        res.end();
+      }
+      // if id exists in the db, user already exists, don't proceed with sign up
+      else if (result[0] && result[0].id) {
+        res.render('signup', {
+          errors: 'Email address already exists. Please login to your existing account or use a different email.',
         });
+      }
+      // we have a new user password we need to hash then add to the db
+      else {
+        var ciphertext = CryptoJS.AES.encrypt(req.body.user_password, 'secret key 123').toString();
+        // TODO: Move the secret key to a configuration file. 
+        // console.log(ciphertext);
+        mysql.pool.query(
+          "INSERT INTO users (name, email, password) VALUES (?,?,?)",
+          [req.body.full_name, req.body.user_email, ciphertext],
+          function(err, result) {
+            if (err) {
+              console.log(JSON.stringify(err));
+              res.write(JSON.stringify(err));
+              res.end();
+            } else {
+              // pass the id of the user inserted to the home page to load projects related to user
+              req.session.userId = result.insertId;
+              res.redirect('projects');
+            }
+          }
+        );
+      }
     }
-  });
+  );
 });
 
 app.get('/home',function(req,res,next){
