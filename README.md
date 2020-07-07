@@ -2,9 +2,11 @@
 
 Task management system for streamlining workflows with projects, tasks, and subtasks shared amongst users.
 
-High-Level Software Architecture:
+## High-Level Software Architecture
 
 ![Three-Tiered Software Architecture](https://github.com/sarahforest/cs361/blob/master/architecture.png)
+
+## SQL Database Setup
 
 User Table Setup:
 
@@ -16,6 +18,8 @@ CREATE TABLE `users` (
 `password` varchar(500) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ```
+
+Projects Table Setup:
 
 ```
 DROP TABLE IF EXISTS `Projects`;
@@ -33,7 +37,8 @@ ALTER TABLE `Projects`
   MODIFY `Project_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 ```
 
--- Insertion statements for sample DB data
+Insertion Statements for Sample DB Data (Optional):
+
 ```
 INSERT INTO `Projects` (`Project_ID`, `Project_Name`, `Due_Date`, `Status`) VALUES
 (1, 'Tax Manager',          '2020-09-22',   'On Hold'),
@@ -41,10 +46,8 @@ INSERT INTO `Projects` (`Project_ID`, `Project_Name`, `Due_Date`, `Status`) VALU
 (3, 'Music Manager',        '2021-03-19',   'Complete');
 ```
 
-Access user credential: req.session.userId
+User_Projects Table Setup:
 
-
--- User_Projects Table -- 
 ```
 CREATE TABLE `user_projects` (
   `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -54,3 +57,7 @@ CREATE TABLE `user_projects` (
    FOREIGN KEY (project_id) REFERENCES Projects(Project_ID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ```
+
+## Access User Credential
+
+Access user credential: req.session.userId
