@@ -17,6 +17,7 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ```
 
+```
 DROP TABLE IF EXISTS `Projects`;
 CREATE TABLE `Projects` (
   `Project_ID` int(11) NOT NULL,
@@ -30,17 +31,21 @@ ALTER TABLE `Projects`
 
 ALTER TABLE `Projects`
   MODIFY `Project_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+```
 
 -- Insertion statements for sample DB data
+```
 INSERT INTO `Projects` (`Project_ID`, `Project_Name`, `Due_Date`, `Status`) VALUES
 (1, 'Tax Manager',          '2020-09-22',   'On Hold'),
 (2, 'Inventory Manager',    '2020-12-23',   'In Progress'),
 (3, 'Music Manager',        '2021-03-19',   'Complete');
+```
 
 Access user credential: req.session.userId
 
 
 -- User_Projects Table -- 
+```
 CREATE TABLE `user_projects` (
   `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
@@ -48,3 +53,4 @@ CREATE TABLE `user_projects` (
    FOREIGN KEY (user_id) REFERENCES users(id),
    FOREIGN KEY (project_id) REFERENCES Projects(Project_ID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+```
