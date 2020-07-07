@@ -1,21 +1,18 @@
 var express = require('express');
+var handlebars = require('express-handlebars').create({defaultLayout:'main'});
 var mysql = require('./dbcon.js');
 var bodyParser = require('body-parser');
-
-
 var CryptoJS = require("crypto-js");
-var app = express();
 var path = require('path');
 var session = require('express-session');
 
+var app = express();
+
 app.use(session({
-  secret: '7C44-74D44-WppQ3877S',
+  secret: '7C44-74D44-WppQ3877S', // TODO: Move this into a configuration file.
   resave: true,
   saveUninitialized: true
 }));
-
-var handlebars = require('express-handlebars').create({defaultLayout:'main'});
-
 app.use(express.static(path.join(__dirname, '/public')));
 app.engine('handlebars', handlebars.engine);
 app.use(bodyParser.urlencoded({extended:true}));
@@ -71,13 +68,9 @@ app.post('/add-new-user', function (req, res) {
   });
 });
 
-
-
-
-
 app.get('/home',function(req,res,next){
   var context = {};
-  //using the session rather than passing as a variable, will preserve across multiple pages this way
+  // Using the session rather than passing as a variable; will preserve across multiple pages this way.
   context.id = req.session.userId;
   console.log(req.session);
   res.render('home',context);
