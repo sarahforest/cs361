@@ -79,7 +79,7 @@ app.get('/home',function(req,res,next){
   var context = {};
   //using the session rather than passing as a variable, will preserve across multiple pages this way
   context.id = req.session.userId;
-  console.log(req.session)
+  console.log(req.session);
   res.render('home',context);
 });
 
@@ -120,10 +120,16 @@ app.post('/user-login', function (req, res) {
       // valid credentials
       else {
         req.session.userId = result[0].id;
-        res.redirect('home');
+        res.redirect('projects');
       }
     }
   });
+});
+
+app.post('/user-logout', function (req, res) {
+  // clear session
+  req.session.userId = null;
+  res.redirect('/');
 });
 
 app.use(function(req,res){

@@ -124,8 +124,8 @@ body {
     padding: 2% 5%;
 }
 
-/* sign up page CSS */
-#sign-up-page #danger {
+/* login page CSS */
+#login-page #danger {
     color: red;
 }
 

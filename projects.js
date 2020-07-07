@@ -75,6 +75,7 @@ module.exports = function(){
     router.get('/', function(req, res){
         var callbackCount = 0;
         var context = {};
+        context.id = req.session.userId;
         context.jsscripts = ["deleteproject.js"];
         var mysql = req.app.get('mysql');
         getProjects(res, mysql, context, complete);

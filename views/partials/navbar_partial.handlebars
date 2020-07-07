@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="/#">EC3 Task Management System</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
+        <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarText">
         <ul class="navbar-nav mr-auto">
@@ -27,7 +27,14 @@
                 <a class="nav-link" href='/#'>NAV 6</a>
             </li>
         </ul>
-
-        </span>
+        {{#if id}}
+            <form action="/user-logout" method="post">
+                <button type="submit" class="nav-item">Log out</button>
+            </form>
+        {{else}}
+            <form action="/login" method="get">
+                <button type="submit" class="nav-item">Log in</button>
+            </form>
+        {{/if}}
     </div>
 </nav>
