@@ -1,45 +1,45 @@
 <div id="sign-up-page">
-	<div class="float-left">
-		<h1>Try the world’s #1 task management platform for free!</h1>
-		<p>Let our system handle the complexities of managing teams and projects.</p>
-		<h6>Start for free and save time with EC<sup>3</sup></h6>
-		<ul>
-			<li>Unlimited projects for teams</li>
-			<li>Manage projects securely</li>
-			<li>Assign tasks and subtasks to team members</li>
-			<li>Manage workflow seamlessly</li>
-			<li>Set deadlines for your tasks</li>
-			<li>Easily re-assign tasks and subtasks as priorities change</li>
-			<li>Update statuses for tasks and subtasks</li>
-		</ul>
-	</div>
-	<div class="float-right">
-		<div class="form-content">
-			<h1>Join Today</h1>
-			<h5 class="header">Enter your name, email, and password to get started today</h5>
-			{{#if errors}}
-         		<div id='danger'>{{errors}}</div>
-			{{/if}}
-			<form action="/add-new-user" method="post" id="sign_up_form">
-				<div class="input-group">
-					<label>Name*</label>
-					<input name="full_name" id="userName" type="text" required/>
-				</div>
-				<div class="input-group">
-					<label>Email*</label>
-					<input name="user_email" id="userEmail" type="email" required/>
-				</div>
-				<div class="input-group">
-					<label>Password*</label>
-					<input name="user_password" id="userPassword" type="password" required/>
-				</div>
-				<div class="input-group">
-					<input class="button button-block" type="submit" value="Sign Up" />
-				</div>
-			</form>
-		<div class="login-section">
-			<h5>Already have an account? <a href="/login">Login</a></h5>
-		</div>
-		</div>
-	</div>
+  <div class="float-left">
+    <h1>Try the world’s #1 task management platform for free!</h1>
+    <p>Let our system handle the complexities of managing teams and projects.</p>
+    <h6>Start for free and save time with EC<sup>3</sup></h6>
+    <ul>
+      <li>Unlimited projects for teams</li>
+      <li>Manage projects securely</li>
+      <li>Assign tasks and subtasks to team members</li>
+      <li>Manage workflow seamlessly</li>
+      <li>Set deadlines for your tasks</li>
+      <li>Easily re-assign tasks and subtasks as priorities change</li>
+      <li>Update statuses for tasks and subtasks</li>
+    </ul>
+  </div>
+  <div class="float-right">
+    <div class="form-content">
+      <h1>Join Today</h1>
+      <h5 class="header">Enter your name, email, and password to get started today</h5>
+      {{#if errors}}
+      <div id='danger'>{{errors}}</div>
+      {{/if}}
+      <form action="/add-new-user" method="post" id="sign_up_form">
+        <div class="input-group">
+          <label>Name*</label>
+          <input name="full_name" id="userName" type="text" required />
+        </div>
+        <div class="input-group">
+          <label>Email*</label>
+          <input name="user_email" id="userEmail" type="email" required />
+        </div>
+        <div class="input-group">
+          <label>Password*</label>
+          <input name="user_password" id="userPassword" type="password" required />
+        </div>
+        <div class="input-group">
+          <input class="button button-block" type="submit" value="Sign Up" />
+        </div>
+      </form>
+      <div class="login-section">
+        <h5>Already have an account? <a href="/login">Login</a></h5>
+      </div>
+    </div>
+  </div>
 </div>
