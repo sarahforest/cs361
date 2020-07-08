@@ -1,183 +1,181 @@
-/* here is the stylesheet */
-/* nominal change to create commit */
-/* trying to pull and push a change - ai */
 body {
-    background-color: #fafafa;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    color: #525151;
+  background-color: #fafafa;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #525151;
 }
+
 /* sign up page CSS */
 #login-page #danger {
-    color: red;
+  color: red;
 }
 
 #sign-up-page h6 {
-    text-transform: uppercase;
-    font-size: 14px;
-    font-weight: 200;
-    margin: 14px 0;
+  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: 200;
+  margin: 14px 0;
 }
 
 #sign-up-page label {
-    margin: 10px 0;
-    display: block;
+  margin: 10px 0;
+  display: block;
 }
 
 #sign-up-page input {
-    background: none;
-    border: 1px solid #808080;
-    border-radius: 0px;
-    width: 96%;
-    padding: 10px;
+  background: none;
+  border: 1px solid #808080;
+  border-radius: 0px;
+  width: 96%;
+  padding: 10px;
 }
 
 #sign-up-page ul li {
-    margin-bottom: 8px;
+  margin-bottom: 8px;
 }
 
 #sign_up_form .input-group:last-of-type {
-    margin-bottom: 30px;
+  margin-bottom: 30px;
 }
 
 #sign-up-page .button.button-block {
-    width: 104%;
-    background: #fcbd01;
-    border-color: #fcbd01;
-    color: #fff;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    font-weight: 900;
-    letter-spacing: 1px;
+  width: 104%;
+  background: #fcbd01;
+  border-color: #fcbd01;
+  color: #fff;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-weight: 900;
+  letter-spacing: 1px;
 }
 
 #sign-up-page .login-section {
-    margin: 3% -10% -4% -10%;
-    border-radius: 2px;
-    background-color: #fcbd01;
-    padding: 2%;
+  margin: 3% -10% -4% -10%;
+  border-radius: 2px;
+  background-color: #fcbd01;
+  padding: 2%;
 }
 
 #sign-up-page .login-section h5 {
-    text-transform: uppercase;
-    padding: 0% 2%;
-    color: white;
-    text-align: center;
+  text-transform: uppercase;
+  padding: 0% 2%;
+  color: white;
+  text-align: center;
 }
 
 #sign-up-page .login-section .button.button-block{
-    width: 100%;
-    border: 2px solid white;
-    background: transparent;
+  width: 100%;
+  border: 2px solid white;
+  background: transparent;
 }
 #sign-up-page .button.button-block:hover {
-    background: #fcb101;
-    border-color: #fcb101;
+  background: #fcb101;
+  border-color: #fcb101;
 }
 
 
 #sign-up-page .float-left {
-    width: 46%;
-    float: left;
-    padding: 2%;
+  width: 46%;
+  float: left;
+  padding: 2%;
 }
 
 #sign-up-page .float-right {
-    width: 46%;
-    float: left;
-    padding: 2%;
+  width: 46%;
+  float: left;
+  padding: 2%;
 }
 
 #sign-up-page #userPassword {
-    margin-bottom: 14px;
+  margin-bottom: 14px;
 }
 #sign-up-page ul {
-    list-style-type: none;
+  list-style-type: none;
 }
 #sign-up-page li:before {
-    content: "\f00c"; /* FontAwesome Unicode */
-    font-family: FontAwesome;
-    display: inline-block;
-    margin-left: -1.3em; /* same as padding-left set on li */
-    width: 1.3em; /* same as padding-left set on li */
-    color: #fcbd01;
+  content: "\f00c"; /* FontAwesome Unicode */
+  font-family: FontAwesome;
+  display: inline-block;
+  margin-left: -1.3em; /* same as padding-left set on li */
+  width: 1.3em; /* same as padding-left set on li */
+  color: #fcbd01;
   }
 
 #sign-up-page .form-content h1 {
-    margin-bottom: 2px;
+  margin-bottom: 2px;
 }
 #sign-up-page .form-content .header {
-    font-size: 17px;
-    font-weight: 200;
-    margin: 0;
+  font-size: 17px;
+  font-weight: 200;
+  margin: 0;
 }
 
 #sign-up-page a {
-    color: white;
-    text-decoration: underline;
+  color: white;
+  text-decoration: underline;
 }
 
 #sign-up-page .form-content {
-    background-color: white;
-    width: 50%;
-    border-radius: 3px;
-    border: 1px solid #808080;
-    padding: 2% 5%;
+  background-color: white;
+  width: 50%;
+  border-radius: 3px;
+  border: 1px solid #808080;
+  padding: 2% 5%;
 }
 
 /* login page CSS */
 #login-page #danger {
-    color: red;
+  color: red;
 }
 
 #login-page * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 #login-page {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
 #login-page .form-content {
-    width: 50%;
-    max-width: 600px;
-    background-color: white;
-    border-radius: 3px;
-    border: 1px solid #808080;
-    padding: 2% 5%;
+  width: 50%;
+  max-width: 600px;
+  background-color: white;
+  border-radius: 3px;
+  border: 1px solid #808080;
+  padding: 2% 5%;
 }
 
 #login-page label {
-    margin: 10px 0;
-    display: block;
+  margin: 10px 0;
+  display: block;
 }
 
 #login-page input {
-    background: none;
-    border: 1px solid #808080;
-    border-radius: 0px;
-    width: 100%;
-    padding: 10px;
+  background: none;
+  border: 1px solid #808080;
+  border-radius: 0px;
+  width: 100%;
+  padding: 10px;
 }
 
 #login-page .button.button-block {
-    display: block;
-    margin-top: 20px;
-    background: #fcbd01;
-    border-color: #fcbd01;
-    color: #fff;
-    font-size: 0.9em;
-    font-weight: 900;
-    letter-spacing: 1px;
+  display: block;
+  margin-top: 20px;
+  background: #fcbd01;
+  border-color: #fcbd01;
+  color: #fff;
+  font-size: 0.9em;
+  font-weight: 900;
+  letter-spacing: 1px;
 }
 
 #login-page .button.button-block:hover {
-    background: #fcb101;
-    border-color: #fcb101;
+  background: #fcb101;
+  border-color: #fcb101;
 }
 
 #login_form .input-group:last-of-type {
-    margin-bottom: 30px;
+  margin-bottom: 30px;
 }
