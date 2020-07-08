@@ -58,6 +58,32 @@ CREATE TABLE `user_projects` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ```
 
-## Access User Credential
+## Authentication
 
-Access user credential: req.session.userId
+- When successfully registered or logged in, creates an auth token (JWT) containing user id and stores it in session. (Session will preserve across multiple pages.)
+
+- For protected endpoints that require authentication, use middleware ```requireAuth``` that verifies the auth token in session.
+
+  - If the auth token is verified, the user data (id, name, email) will be stored in ```req.user```.
+
+  - Otherwise redirects to homepage.
+
+- Example:
+
+  ```
+  const { requireAuth } = require('./middleware.js');
+
+  app.get('/projects', requireAuth, function(req, res) {
+    console.log(req.user);
+    /* more code here */
+  });
+  ```
+
+  Output:
+  ```
+  {
+    id: 1,
+    name: 'Test',
+    email: 'test1@test.com'
+  }
+  ```

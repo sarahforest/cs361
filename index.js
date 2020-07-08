@@ -5,6 +5,7 @@ var bodyParser = require('body-parser');
 var CryptoJS = require("crypto-js");
 var path = require('path');
 var session = require('express-session');
+const AuthService = require('./auth-service.js');
 
 var app = express();
 
@@ -19,16 +20,17 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.set('view engine', 'handlebars');
 app.set('port', process.argv[2]);
 
+app.use('/auth', require('./auth-router.js'));
 app.use('/projects', require('./projects.js'));
 
 app.get('/', function(req, res, next) {
   var context = {};
-  res.render('signup',context);
+  res.render('signup', context);
 });
 
-app.get('/projects', function(req, res, next) {
-  var context = {};
-  res.render('projects',context);
+app.get('/login', function(req, res, next) {
+  const context = { email: '', password: '' };
+  res.render('login', context);
 });
 
 app.post('/add-new-user', function(req, res) {
@@ -61,72 +63,16 @@ app.post('/add-new-user', function(req, res) {
               res.write(JSON.stringify(err));
               res.end();
             } else {
-              // pass the id of the user inserted to the home page to load projects related to user
-              req.session.userId = result.insertId;
-              res.redirect('projects');
+              const payload = { userId: result.insertId };
+              // store auth token in session
+              req.session.authToken = AuthService.createJwt(payload);
+              res.redirect('/projects');
             }
           }
         );
       }
     }
   );
-});
-
-app.get('/home',function(req,res,next){
-  var context = {};
-  // Using the session rather than passing as a variable; will preserve across multiple pages this way.
-  context.id = req.session.userId;
-  console.log(req.session);
-  res.render('home',context);
-});
-
-app.get('/login', function(req, res, next) {
-  const context = { email: '', password: '' };
-  res.render('login',context);
-});
-
-app.post('/user-login', function (req, res) {
-  mysql.pool.query("SELECT * from users where email=" + mysql.pool.escape(req.body.user_email),
-  function(err,result) {
-    // for re-rendering input values if login fails
-    const context = {
-      email: req.body.user_email,
-      password: req.body.user_password,
-    };
-
-    // if error, handle by outputting issue encountered
-    if (err) {
-      console.log(JSON.stringify(err));
-      res.write(JSON.stringify(err));
-      res.end();
-    } 
-    // email doesn't exist
-    else if (!result[0]) {
-      context.errors = 'Incorrect email or password';
-      res.status(401).render('login', context);
-    }
-    else {
-      var bytes  = CryptoJS.AES.decrypt(result[0].password, 'secret key 123');
-      var decryptedPw = bytes.toString(CryptoJS.enc.Utf8);
-      
-      // password incorrect
-      if (req.body.user_password !== decryptedPw) {
-        context.errors = 'Incorrect email or password';
-        res.status(401).render('login', context);
-      }
-      // valid credentials
-      else {
-        req.session.userId = result[0].id;
-        res.redirect('projects');
-      }
-    }
-  });
-});
-
-app.post('/user-logout', function (req, res) {
-  // clear session
-  req.session.userId = null;
-  res.redirect('/');
 });
 
 app.use(function(req,res){

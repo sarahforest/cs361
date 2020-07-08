@@ -1,7 +1,7 @@
 module.exports = function(){
     var express = require('express');
     var router = express.Router();
-    
+    var { requireAuth } = require('./middleware.js');
 
     /* Add Project */
     router.post('/', function(req, res){
@@ -72,10 +72,10 @@ module.exports = function(){
     }
 
     /* Display all PROJECTS */
-    router.get('/', function(req, res){
+    router.get('/', requireAuth, function(req, res){
         var callbackCount = 0;
         var context = {};
-        context.id = req.session.userId;
+        context.userId = req.user.id;
         context.jsscripts = ["deleteproject.js"];
         var mysql = req.app.get('mysql');
         getProjects(res, mysql, context, complete);

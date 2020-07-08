@@ -27,13 +27,9 @@
                 <a class="nav-link" href='/#'>NAV 6</a>
             </li>
         </ul>
-        {{#if id}}
-            <form action="/user-logout" method="post">
+        {{#if userId}}
+            <form action="/auth/logout" method="post">
                 <button type="submit" class="nav-item">Log out</button>
-            </form>
-        {{else}}
-            <form action="/login" method="get">
-                <button type="submit" class="nav-item">Log in</button>
             </form>
         {{/if}}
     </div>
