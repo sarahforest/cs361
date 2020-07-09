@@ -52,8 +52,8 @@ CREATE TABLE `user_projects` (
 # Insertion Statements for Sample DB Data (Optional):
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`) VALUES
-(1, 'Shelly Armstrong',  'shell38@gmail.com',   'xyz123'),
-(2, 'Richard Collins',   'rich92@gmail.com',   'yada98');
+(1, 'Shelly Armstrong',  'shell38@gmail.com',   'U2FsdGVkX18IawwV/GgjafEReWofS6nXsYDZ9rI5Sw4='), #password
+(2, 'Richard Collins',   'rich92@gmail.com',    'U2FsdGVkX194Yys4Y9SU/w/VgBRotbukKWOuGKvpLiw='); #password
 
 INSERT INTO `Projects` (`Project_ID`, `Project_Name`, `Due_Date`, `Status`) VALUES
 (1, 'Tax Manager',          '2020-09-22',   'On Hold'),

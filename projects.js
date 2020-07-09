@@ -62,7 +62,14 @@ module.exports = function(){
     /* function to display all PROJECTS */
     function getProjects(res, mysql, context, complete){
         var mysql = require('./dbcon.js');
-        mysql.pool.query("SELECT Project_ID, Project_Name, Due_Date, Status FROM Projects", function(error, results, fields){
+        var sql = "SELECT Project_ID, Project_Name, Due_Date, Status FROM Projects WHERE Project_ID = ?"
+
+        var sql = "SELECT p.Project_ID, p.Project_Name, p.Due_Date, p.Status FROM Projects AS p INNER JOIN user_projects AS up ON p.Project_ID = up.project_id WHERE up.user_id = ?"
+
+        var inserts = [context.userId];
+        mysql.pool.query(sql, inserts, function(error, results, fields)
+        //mysql.pool.query("SELECT Project_ID, Project_Name, Due_Date, Status FROM Projects WHERE Project_ID = ?", function(error, results, fields)
+        {
             if(error){
                 res.write(JSON.stringify(error));
                 res.end();
