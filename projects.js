@@ -4,7 +4,8 @@ module.exports = function(){
     var { requireAuth } = require('./middleware.js');
 
     /* Add Project */
-    router.post('/', function(req, res){
+    router.post('/', function(req, res)
+    {
         var mysql = require('./dbcon.js');
         var sql = "INSERT IGNORE INTO Projects (Project_Name, Status) VALUES (?,?)";
    
@@ -18,6 +19,7 @@ module.exports = function(){
                 res.redirect('/projects');
             }
         });
+
     });
 
     // on project submit, add users to the user_projects table
