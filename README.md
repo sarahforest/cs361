@@ -8,20 +8,21 @@ Task management system for streamlining workflows with projects, tasks, and subt
 
 ## SQL Database Setup
 
-User Table Setup:
+# User Table Setup:
 
-```
 CREATE TABLE `users` (
 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 `name` varchar(255) DEFAULT NULL,
 `email` varchar(255) DEFAULT NULL,
 `password` varchar(500) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-```
 
-Projects Table Setup:
+ALTER TABLE `users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
-```
+
+# Projects Table Setup:
+
 DROP TABLE IF EXISTS `Projects`;
 CREATE TABLE `Projects` (
   `Project_ID` int(11) NOT NULL,
@@ -35,20 +36,10 @@ ALTER TABLE `Projects`
 
 ALTER TABLE `Projects`
   MODIFY `Project_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-```
 
-Insertion Statements for Sample DB Data (Optional):
 
-```
-INSERT INTO `Projects` (`Project_ID`, `Project_Name`, `Due_Date`, `Status`) VALUES
-(1, 'Tax Manager',          '2020-09-22',   'On Hold'),
-(2, 'Inventory Manager',    '2020-12-23',   'In Progress'),
-(3, 'Music Manager',        '2021-03-19',   'Complete');
-```
+# User_Projects Table Setup:
 
-User_Projects Table Setup:
-
-```
 CREATE TABLE `user_projects` (
   `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
@@ -56,7 +47,28 @@ CREATE TABLE `user_projects` (
    FOREIGN KEY (user_id) REFERENCES users(id),
    FOREIGN KEY (project_id) REFERENCES Projects(Project_ID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-```
+
+
+# Insertion Statements for Sample DB Data (Optional):
+
+INSERT INTO `users` (`id`, `name`, `email`, `password`) VALUES
+(1, 'Shelly Armstrong',  'shell38@gmail.com',   'xyz123'),
+(2, 'Richard Collins',   'rich92@gmail.com',   'yada98');
+
+INSERT INTO `Projects` (`Project_ID`, `Project_Name`, `Due_Date`, `Status`) VALUES
+(1, 'Tax Manager',          '2020-09-22',   'On Hold'),
+(2, 'Inventory Manager',    '2020-12-23',   'In Progress'),
+(3, 'Music Manager',        '2021-03-19',   'Complete');
+
+INSERT INTO `user_projects` (`id`, `user_id`, `project_id`) VALUES
+(1, '1', '1'),
+(2, '1', '2'),
+(3, '2', '3');
+
+
+
+
+
 
 ## Authentication
 
