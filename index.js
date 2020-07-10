@@ -21,7 +21,10 @@ app.set('view engine', 'handlebars');
 app.set('port', process.argv[2]);
 
 app.use('/auth', require('./auth-router.js'));
+
 app.use('/projects', require('./projects.js'));
+
+app.use('/project', require('./project.js'));
 
 app.get('/', function(req, res, next) {
   var context = {};

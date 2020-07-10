@@ -3,9 +3,9 @@
 <!-- NAV BAR -->
 
 <br />
-<!-- ADD A PROJECT -->
+<!-- ADD A TASK -->
 <div class="container">
-  <h2>Add a New Project</h2>
+  <h2>Add a New Task to this Project</h2>
   <form id="add_Project" action="/projects" method="post">
 
     <div class="form-row">
@@ -62,7 +62,7 @@
 </div>
 <p></p>
 <div class="container">
-  <h2>Your Current Projects</h2>
+  <h2>Tasks for This Project</h2>
   <p></p>
   <table class="table table-striped">
 
@@ -70,6 +70,7 @@
       <tr>
         <th scope="col">ID</th>
         <th scope="col">Name</th>
+        <th scope="col">Description</th>
         <th scope="col">Due Date</th>
         <th scope="col">Status</th>
         <th scope="col">Manage</th>
@@ -77,16 +78,17 @@
     </thead>
 
     <tbody>
-      {{#each currentprojects}}
+      {{#each tasks}}
       <tr>
-        <th scope="row">{{Project_ID}}</th>
-        <td>{{Project_Name}}</td>
-        <td>{{Due_Date}}</td>
-        <td>{{Status}}</td>
+        <th scope="row">{{id}}</th>
+        <td>{{name}}</td>
+        <td>{{description}}</td>
+        <td>{{due_date}}</td>
+        <td>{{status}}</td>
         <td>
-          <a href="/project/{{Project_ID}}"> <button type="button" class="btn btn-success"><i class="fa fa-edit"></i>
+          <a href="/task/{{id}}"> <button type="button" class="btn btn-success"><i class="fa fa-edit"></i>
             </button></a>
-          <button type="button" class="btn btn-danger" onclick="deleteProject({{Project_ID}})"><i
+          <button type="button" class="btn btn-danger" onclick="deleteTask({{Project_id}})"><i
               class="fa fa-trash"></i></button>
         </td>
       </tr>
@@ -96,38 +98,3 @@
   </table>
 </div>
 <!-- DISPLAY PROJECTS -->
-
-
-<div class="container">
-  <h2>Your Past Projects</h2>
-  <p></p>
-  <table class="table table-striped">
-
-    <thead class="thead-dark">
-      <tr>
-        <th scope="col">ID</th>
-        <th scope="col">Name</th>
-        <th scope="col">Due Date</th>
-        <th scope="col">Status</th>
-        <th scope="col">Manage</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      {{#each pastprojects}}
-      <tr>
-        <th scope="row">{{Project_ID}}</th>
-        <td>{{Project_Name}}</td>
-        <td>{{Due_Date}}</td>
-        <td>{{Status}}</td>
-        <td>
-          <a href="/project/{{Project_ID}}"> <button type="button" class="btn btn-success"><i class="fa fa-edit"></i>
-            </button></a>
-          <button type="button" class="btn btn-danger" onclick="deleteProject({{Project_ID}})"><i
-              class="fa fa-trash"></i></button>
-        </td>
-      </tr>
-      {{/each}}
-    </tbody>
-  </table>
-</div>
