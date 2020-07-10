@@ -116,10 +116,11 @@ body {
 
 #sign-up-page .form-content {
   background-color: white;
-  width: 50%;
+  width: 75%;
   border-radius: 3px;
   border: 1px solid #808080;
   padding: 2% 5%;
+  min-width: 520px
 }
 
 /* login page CSS */
