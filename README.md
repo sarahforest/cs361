@@ -11,9 +11,14 @@ Task management system for streamlining workflows with projects, tasks, and subt
 # Setup for All Database Tables:
 
 ```
-# Users Table Setup:
+# Drop Existing Tables:
 
+DROP TABLE IF EXISTS `subtasks`;
+DROP TABLE IF EXISTS `tasks`;
+DROP TABLE IF EXISTS `Projects`;
 DROP TABLE IF EXISTS `users`;
+
+# Users Table Setup:
 
 CREATE TABLE `users` (
 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -27,8 +32,6 @@ ALTER TABLE `users`
 
 # Projects Table Setup:
 
-DROP TABLE IF EXISTS `Projects`;
-
 CREATE TABLE `Projects` (
   `Project_ID` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `Project_Owner` int(11) NOT NULL,
@@ -39,8 +42,6 @@ CREATE TABLE `Projects` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 # Tasks Table Setup:
-
-DROP TABLE IF EXISTS `tasks`;
 
 CREATE TABLE tasks(
     id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -55,8 +56,6 @@ CREATE TABLE tasks(
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
 
 # Subtasks Table Setup:
-
-DROP TABLE IF EXISTS `subtasks`;
 
 CREATE TABLE subtasks(
     id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
