@@ -7,9 +7,11 @@ module.exports = function(){
     router.post('/', function(req, res)
     {
         var mysql = require('./dbcon.js');
-        var sql = "INSERT IGNORE INTO Projects (Project_Name, Status) VALUES (?,?)";
+
+        var sql = "INSERT IGNORE INTO Projects (Project_Name, Status, Project_Owner, Due_Date) VALUES (?,?, ?,?)";
    
-        var inserts = [req.body.Project_Name, req.body.Status];
+        var inserts = [req.body.Project_Name, req.body.Status, req.body.user, req.body.Due_Date];
+
         sql = mysql.pool.query(sql,inserts,function(error, results, fields){
             if(error){
                 console.log(JSON.stringify(error))
@@ -22,30 +24,6 @@ module.exports = function(){
 
     });
 
-    // on project submit, add users to the user_projects table
-    function updateProjectUsersTable(res, projectId, usersAssigned) {
-        var mysql = require('./dbcon.js');
- 
-        var count = 0;
-        var lengthUsers = usersAssigned.length;
-        usersAssigned.forEach(function(userId) {
-            mysql.pool.query("INSERT INTO user_projects (user_id, project_id) VALUES (?,?)",
-            [userId, projectId],
-            function(err,result) {
-                if (err) {
-                    console.log(JSON.stringify(err));
-                    res.write(JSON.stringify(err));
-                    res.end();
-                } else {
-                    
-                    count++;
-                    if (count == lengthUsers) {
-                        res.redirect('projects');
-                    }
-                }
-            });
-        })
-    }
 
     // function that returns the entire list of users as a promise
     function getUsers(context, complete) {
@@ -61,12 +39,12 @@ module.exports = function(){
             })
       }
  
-    /* function to display all PROJECTS */
-    function getProjects(res, mysql, context, complete){
+    /* function to display all CURRENT PROJECTS */
+    function getCurrentProjects(res, mysql, context, complete){
         var mysql = require('./dbcon.js');
-        var sql = "SELECT Project_ID, Project_Name, Due_Date, Status FROM Projects WHERE Project_ID = ?"
+        var sql = "SELECT Project_ID, Project_Name, Due_Date, Status FROM Projects WHERE Project_Owner = ?  AND Status != 'Completed' ORDER BY Due_Date ASC"
 
-        var sql = "SELECT p.Project_ID, p.Project_Name, p.Due_Date, p.Status FROM Projects AS p INNER JOIN user_projects AS up ON p.Project_ID = up.project_id WHERE up.user_id = ?"
+       // var sql = "SELECT p.Project_ID, p.Project_Name, p.Due_Date, p.Status FROM Projects AS p INNER JOIN user_projects AS up ON p.Project_ID = up.project_id WHERE up.user_id = ?"
 
         var inserts = [context.userId];
         mysql.pool.query(sql, inserts, function(error, results, fields)
@@ -76,10 +54,45 @@ module.exports = function(){
                 res.write(JSON.stringify(error));
                 res.end();
             }
-            context.projects = results;
+            context.currentprojects = results;
+            
+                context.currentprojects.forEach(function(project) {
+                    var formatDate = project.Due_Date;
+                    formatDate = formatDate.toISOString().split('T')[0];
+                    var finalDate = formatDate.split("-");
+                    project.Due_Date = finalDate[1] + "-" + finalDate[2] + "-" + finalDate[0];
+                })
+            
             complete();
         });
     }
+
+
+     /* function to display all PAST PROJECTS */
+     function getPastProjects(res, mysql, context, complete){
+        var mysql = require('./dbcon.js');
+        var sql = "SELECT Project_ID, Project_Name, Due_Date, Status FROM Projects WHERE Project_Owner = ?  AND Status = 'Completed' ORDER BY Due_Date ASC"
+
+        var inserts = [context.userId];
+        mysql.pool.query(sql, inserts, function(error, results, fields)
+        {
+            if(error){
+                res.write(JSON.stringify(error));
+                res.end();
+            }
+            context.pastprojects = results;
+            
+                context.pastprojects.forEach(function(project) {
+                    var formatDate = project.Due_Date;
+                    formatDate = formatDate.toISOString().split('T')[0];
+                    var finalDate = formatDate.split("-");
+                    project.Due_Date = finalDate[1] + "-" + finalDate[2] + "-" + finalDate[0];
+                })
+            
+            complete();
+        });
+    }
+
 
     /* Display all PROJECTS */
     router.get('/', requireAuth, function(req, res){
@@ -87,12 +100,14 @@ module.exports = function(){
         var context = {};
         context.userId = req.user.id;
         var mysql = req.app.get('mysql');
-        getProjects(res, mysql, context, complete);
+        getCurrentProjects(res, mysql, context, complete);
          function complete(){
             callbackCount++;
             if(callbackCount == 1){
+                getPastProjects(res, mysql, context, complete);
+            } else if (callbackCount == 2) {
                 getUsers(context, complete);
-            } else if (callbackCount >= 2) {
+            } else if (callbackCount >= 3) {
                 res.render('projects', context);
             }
         }
