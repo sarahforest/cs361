@@ -75,11 +75,13 @@ INSERT INTO `users` (`id`, `name`, `email`, `password`) VALUES
 (1, 'Shelly Armstrong',  'shell38@gmail.com',   'U2FsdGVkX18IawwV/GgjafEReWofS6nXsYDZ9rI5Sw4='), #password
 (2, 'Richard Collins',   'rich92@gmail.com',    'U2FsdGVkX194Yys4Y9SU/w/VgBRotbukKWOuGKvpLiw='); #password
 
-
 INSERT INTO `Projects` (`Project_ID`, `Project_Name`, `Project_Owner`, `Due_Date`, `Status`) VALUES
 (1, 'Tax Manager', 2,          '2020-09-22',   'On Hold'),
 (2, 'Inventory Manager', 1,   '2020-12-23',   'In Progress'),
 (3, 'Music Manager',  1,      '2021-03-19',   'Completed');
+
+INSERT INTO `tasks` (`project_id`, `name`, `assignee_id`, `due_date`, `status`, `description`) VALUES
+(2, 'Create template files.', 2, '2020-07-10', 'To Do', 'Use stagehand.');
 
 ```
 
