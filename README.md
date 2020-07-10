@@ -8,9 +8,14 @@ Task management system for streamlining workflows with projects, tasks, and subt
 
 ## SQL Database Setup
 
-# User Table Setup:
+# Setup for All Database Tables:
 
 ```
+
+# users Table Setup:
+
+DROP TABLE IF EXISTS `users`;
+
 CREATE TABLE `users` (
 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 `name` varchar(255) DEFAULT NULL,
@@ -20,12 +25,11 @@ CREATE TABLE `users` (
 
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-```
 
 # Projects Table Setup:
 
-```
 DROP TABLE IF EXISTS `Projects`;
+
 CREATE TABLE `Projects` (
   `Project_ID` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `Project_Owner` int(11) NOT NULL,
@@ -35,10 +39,10 @@ CREATE TABLE `Projects` (
    FOREIGN KEY (Project_Owner) REFERENCES users(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
 # Tasks Table Setup:
+
 CREATE TABLE tasks(
- 	id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     project_id int(11) DEFAULT NULL,
     name varchar(255) DEFAULT NULL,
     assignee_id int(11) DEFAULT NULL,
@@ -62,10 +66,8 @@ CREATE TABLE subtasks(
     FOREIGN KEY (assignee_id) REFERENCES users(id)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
 
-
 # Insertion Statements for Sample DB Data (Optional):
 
-```
 INSERT INTO `users` (`id`, `name`, `email`, `password`) VALUES
 (1, 'Shelly Armstrong',  'shell38@gmail.com',   'U2FsdGVkX18IawwV/GgjafEReWofS6nXsYDZ9rI5Sw4='), #password
 (2, 'Richard Collins',   'rich92@gmail.com',    'U2FsdGVkX194Yys4Y9SU/w/VgBRotbukKWOuGKvpLiw='); #password
@@ -76,6 +78,7 @@ INSERT INTO `Projects` (`Project_ID`, `Project_Name`, `Project_Owner`, `Due_Date
 (2, 'Inventory Manager', 3,   '2020-12-23',   'In Progress'),
 (3, 'Music Manager',  3,      '2021-03-19',   'Complete');
 
+```
 
 ## Authentication
 
