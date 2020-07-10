@@ -78,8 +78,8 @@ INSERT INTO `users` (`id`, `name`, `email`, `password`) VALUES
 
 INSERT INTO `Projects` (`Project_ID`, `Project_Name`, `Project_Owner`, `Due_Date`, `Status`) VALUES
 (1, 'Tax Manager', 2,          '2020-09-22',   'On Hold'),
-(2, 'Inventory Manager', 3,   '2020-12-23',   'In Progress'),
-(3, 'Music Manager',  3,      '2021-03-19',   'Complete');
+(2, 'Inventory Manager', 1,   '2020-12-23',   'In Progress'),
+(3, 'Music Manager',  1,      '2021-03-19',   'Complete');
 
 ```
 
