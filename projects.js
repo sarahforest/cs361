@@ -86,7 +86,6 @@ module.exports = function(){
         var callbackCount = 0;
         var context = {};
         context.userId = req.user.id;
-        context.jsscripts = ["deleteproject.js"];
         var mysql = req.app.get('mysql');
         getProjects(res, mysql, context, complete);
          function complete(){
@@ -101,6 +100,8 @@ module.exports = function(){
 
     /* Route to DELETE specified Project */
     router.delete('/:id', function(req, res){
+        console.log(`server: deleting project ${req.params.id}`);
+        
         // var mysql = req.app.get('mysql');
         var mysql = require('./dbcon.js');
         var sql = "DELETE FROM Projects WHERE Project_ID = ?";

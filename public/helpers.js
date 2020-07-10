@@ -1,4 +1,6 @@
 function deleteProject(id){
+	console.log(`client: requesting to delete project ${id}`);
+	
 	$.ajax({
 		url:'/projects/' + id,
 		type: 'DELETE',
