@@ -4,7 +4,7 @@ module.exports = function(){
     var { requireAuth } = require('./middleware.js');
 
     /* Add Project */
-    router.post('/', function(req, res)
+    router.post('/', requireAuth, function(req, res)
     {
         var mysql = require('./dbcon.js');
 
@@ -114,7 +114,7 @@ module.exports = function(){
     });
 
     /* Route to DELETE specified Project */
-    router.delete('/:id', function(req, res){
+    router.delete('/:id', requireAuth, function(req, res){
         console.log(`server: deleting project ${req.params.id}`);
         
         // var mysql = req.app.get('mysql');
