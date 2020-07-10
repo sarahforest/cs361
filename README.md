@@ -11,8 +11,7 @@ Task management system for streamlining workflows with projects, tasks, and subt
 # Setup for All Database Tables:
 
 ```
-
-# users Table Setup:
+# Users Table Setup:
 
 DROP TABLE IF EXISTS `users`;
 
@@ -41,6 +40,8 @@ CREATE TABLE `Projects` (
 
 # Tasks Table Setup:
 
+DROP TABLE IF EXISTS `tasks`;
+
 CREATE TABLE tasks(
     id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     project_id int(11) DEFAULT NULL,
@@ -54,6 +55,9 @@ CREATE TABLE tasks(
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
 
 # Subtasks Table Setup:
+
+DROP TABLE IF EXISTS `subtasks`;
+
 CREATE TABLE subtasks(
     id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     task_id int(11) DEFAULT NULL,
