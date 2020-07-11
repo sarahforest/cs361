@@ -55,9 +55,16 @@ module.exports = function(){
                 res.end();
             }
             context.currentprojects = results;
+
+            var currentDate = new Date();
             
                 context.currentprojects.forEach(function(project) {
                     var formatDate = project.Due_Date;
+                    if (formatDate <= currentDate) {
+                        project.isOverdue = 1;
+                    } else {
+                        project.isOverdue = 0;
+                    }
                     formatDate = formatDate.toISOString().split('T')[0];
                     var finalDate = formatDate.split("-");
                     project.Due_Date = finalDate[1] + "-" + finalDate[2] + "-" + finalDate[0];
