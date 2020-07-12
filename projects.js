@@ -24,6 +24,7 @@ module.exports = function(){
 
     });
 
+ 
 
     // function that returns the entire list of users as a promise
     function getUsers(context, complete) {

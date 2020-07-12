@@ -55,13 +55,13 @@
 <br />
 <!-- ADD A TASK -->
 <div class="container">
-  <h2>Add a New Task to this Project</h2>
-  <form id="add_Task" action="/projects" method="post">
+  <h2>Add a New Subtask to this Task</h2>
+  <form id="add_Project" action="/projects" method="post">
 
     <div class="form-row">
       <div class="form-group col-md-6">
         <label for="Project_Name">Project Name</label>
-        <input required type="text" class="form-control" placeholder="Task Name" name="Task_Name">
+        <input required type="text" class="form-control" placeholder="Project Name" name="Project_Name">
       </div>
 
 
@@ -128,7 +128,7 @@
     </thead>
 
     <tbody>
-      {{#each tasks}}
+      {{#each subtasks}}
       <tr>
         <th scope="row">{{id}}</th>
         <td>{{name}}</td>
@@ -136,7 +136,8 @@
         <td>{{due_date}}</td>
         <td>{{status}}</td>
         <td>
-          <a href="/task/pid/2/tid/{{id}}/"> <button type="button" class="btn btn-success"><i class="fa fa-edit"></i>
+          
+            <a href="/#"> <button type="button" class="btn btn-success"><i class="fa fa-edit"></i>
             </button></a>
           <button type="button" class="btn btn-danger" onclick="deleteTask({{Project_id}})"><i
               class="fa fa-trash"></i></button>

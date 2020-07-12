@@ -26,6 +26,8 @@ app.use('/projects', require('./projects.js'));
 
 app.use('/project', require('./project.js'));
 
+app.use('/task', require('./task.js'));
+
 app.get('/', function(req, res, next) {
   var context = {};
   res.render('signup', context);

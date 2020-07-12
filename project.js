@@ -38,15 +38,32 @@ module.exports = function(){
                 }
             })
       }
- 
+
+
+    /*function that returns selected project for project/view update form*/
+    function getCurrentProject(res, mysql, context, pid, complete){
+        var mysql = require('./dbcon.js');
+        var sql = "SELECT Project_Name, Due_Date, Status FROM Projects WHERE Project_ID = ?";
+        var inserts = [pid];
+        mysql.pool.query(sql, inserts, function(error, results, fields){
+            if(error){
+                res.write(JSON.stringify(error));
+                res.end();
+            }
+            context.project = results[0];
+            complete();
+        });
+    }
+
+
     /* function to display all tasks of the current Project */
     function getCurrentTasks(pid, req, res, mysql, context, complete){
         var mysql = require('./dbcon.js');
         var sql = `
-SELECT id, tasks.project_id, name, assignee_id, tasks.due_date, tasks.status, tasks.description
-FROM tasks INNER JOIN Projects ON tasks.project_id = Projects.Project_ID 
-WHERE tasks.project_id = ? AND Projects.Project_Owner = ?
-ORDER BY Due_Date ASC
+        SELECT id, tasks.project_id, name, assignee_id, tasks.due_date, tasks.status, tasks.description
+        FROM tasks INNER JOIN Projects ON tasks.project_id = Projects.Project_ID 
+        WHERE tasks.project_id = ? AND Projects.Project_Owner = ?
+        ORDER BY Due_Date ASC
 `;
         mysql.pool.query(sql, [pid, req.user.id], function(error, results, fields)
         {
@@ -73,19 +90,37 @@ ORDER BY Due_Date ASC
         var callbackCount = 0;
         var context = {};
         context.userId = req.user.id;
+        context.jsscripts = ["updateproject.js"];
         var mysql = req.app.get('mysql');
         getCurrentTasks(req.params.pid, req, res, mysql, context, complete);
-         function complete(){
+        getCurrentProject(res, mysql, context, req.params.pid, complete);
+        function complete(){
             // console.log(callbackCount);
             callbackCount++;
             if(callbackCount == 1){
                 getUsers(context, complete);
-            } else if (callbackCount >= 2) {
+            } else if (callbackCount >= 3) {
                 res.render('project', context);
             }
         }
     });
 
+    /* Route to UPDATE specified Project */
+    router.put('/:id', requireAuth, function(req,res){
+        console.log("ok what now?");
+        var mysql = req.app.get('mysql');
+        var sql = "UPDATE Projects SET Project_Name = ? WHERE Project_ID = ?";
+        var inserts = [req.body.Project_Name, req.params.id];
+        sql = mysql.pool.query(sql, inserts, function(error, results, fields){
+            if(error){
+                res.write(JSON.stringify(error));
+                res.end();
+            } else{
+                res.status(200);
+                res.end();
+            }
+        });
+    });
 //     /* Route to DELETE specified Project */
 //     router.delete('/:id', requireAuth, function(req, res){
 //         console.log(`server: deleting project ${req.params.id}`);

@@ -59,6 +59,7 @@ CREATE TABLE tasks(
 
 CREATE TABLE subtasks(
     id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    project_id int(11) DEFAULT NULL,
     task_id int(11) DEFAULT NULL,
     name varchar(255) DEFAULT NULL,
     assignee_id int(11) DEFAULT NULL,
@@ -66,6 +67,7 @@ CREATE TABLE subtasks(
     status varchar(255) NOT NULL,
     description varchar(500) DEFAULT NULL,
     FOREIGN KEY (task_id) REFERENCES tasks(id),
+    FOREIGN KEY (project_id) REFERENCES Projects(Project_ID),
     FOREIGN KEY (assignee_id) REFERENCES users(id)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
 

@@ -9,3 +9,15 @@ function deleteProject(id){
 		}
 	});
 };
+
+function updateProject(pid){
+    $.ajax({
+        url: '/project/' + pid,
+        type: 'PUT',
+        data: $('#update-project').serialize(),
+        success: function(result){
+			//window.location.replace("./");
+			window.location.reload(true);
+        }
+    })
+};
