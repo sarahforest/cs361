@@ -25,27 +25,7 @@ module.exports = function(){
     // });
 
     
-    /* Display all tasks of the current project */
-    router.get('/pid/:pid/tid/:tid', requireAuth, function(req, res){
-        var callbackCount = 0;
-        var context = {};
-        context.userId = req.user.id;
-        //context.jsscripts = ["updateproject.js"];
-        var mysql = req.app.get('mysql');
-        //getCurrentTasks(req.params.pid, req, res, mysql, context, complete);
-        //getCurrentProject(res, mysql, context, req.params.pid, complete);
-        //getCurrentSubTasks(req.params.pid, req.params.tid, req, res, mysql, context, complete)
-        res.render('task', context);
-        // function complete(){
-        //     // console.log(callbackCount);
-        //     callbackCount++;
-        //     if(callbackCount == 1){
-        //         getUsers(context, complete);
-        //     } else if (callbackCount >= 3) {
-        //         res.render('task', context);
-        //     }
-        // }
-    });
+
 
     // function that returns the entire list of users as a promise
     function getUsers(context, complete) {
@@ -116,60 +96,61 @@ module.exports = function(){
     // }
 
         /* function to display all tasks of the current Project */
-        function getCurrentSubTasks(pid, tid, req, res, mysql, context, complete){
+        function getCurrentSubTasks(tid, req, res, mysql, context, complete){
             var mysql = require('./dbcon.js');
-            var sql = `
-            SELECT id, tasks.project_id, name, assignee_id, tasks.due_date, tasks.status, tasks.description
-            FROM tasks INNER JOIN Projects ON tasks.project_id = Projects.Project_ID 
-            WHERE tasks.project_id = ? AND Projects.Project_Owner = ?
-            ORDER BY Due_Date ASC`;
+  
+            // var sql = `
+            // SELECT id, subtasks.project_id, subtasks.name, subtasks.assignee_id, subtasks.due_date, subtasks.status, subtasks.description
+            // FROM subtasks INNER JOIN Projects ON subtasks.project_id = Projects.Project_ID 
+            // WHERE subtasks.project_id = ? AND subtasks.assignee_id = ?
+            // ORDER BY Due_Date ASC`;
 
             var sql = `
             SELECT id, subtasks.project_id, subtasks.name, subtasks.assignee_id, subtasks.due_date, subtasks.status, subtasks.description
-            FROM tasks INNER JOIN Projects ON tasks.project_id = Projects.Project_ID 
-            WHERE subtasks.project_id = ? AND Projects.Project_Owner = ?
-            ORDER BY Due_Date ASC`;
+            FROM subtasks INNER JOIN Projects ON subtasks.project_id = Projects.Project_ID WHERE subtasks.task_id = ? AND subtasks.assignee_id = ? ORDER BY Due_Date ASC`;
 
-            var insert = [pid, tid];
+            var insert = [tid, req.user.id];
+            
+            //console.log(req.user.id);
     
-            mysql.pool.query(sql, [pid, req.user.id], function(error, results, fields)
+            mysql.pool.query(sql, insert, function(error, results, fields)
             {
                 if(error){
                     res.write(JSON.stringify(error));
                     res.end();
                 }
-                // console.log(results);
-                context.tasks = results;
+
+                context.subtasks = results;
                 
-                    context.tasks.forEach(function(task) {
-                        var formatDate = task.due_date;
+                    context.subtasks.forEach(function(subtask) {
+                        var formatDate = subtask.due_date;
                         formatDate = formatDate.toISOString().split('T')[0];
                         var finalDate = formatDate.split("-");
-                        task.due_date = finalDate[1] + "-" + finalDate[2] + "-" + finalDate[0];
+                        subtask.due_date = finalDate[1] + "-" + finalDate[2] + "-" + finalDate[0];
                     })
                 
                 complete();
             });
         }
 
-    /* Display all PROJECTS */
-    router.get('/', requireAuth, function(req, res){
-        var callbackCount = 0;
-        var context = {};
-        context.userId = req.user.id;
-        var mysql = req.app.get('mysql');
-        getCurrentProjects(res, mysql, context, complete);
-         function complete(){
-            callbackCount++;
-            if(callbackCount == 1){
-                getPastProjects(res, mysql, context, complete);
-            } else if (callbackCount == 2) {
-                getUsers(context, complete);
-            } else if (callbackCount >= 3) {
-                res.render('task', context);
-            }
-        }
-    });
+    // /* Display all PROJECTS */
+    // router.get('/', requireAuth, function(req, res){
+    //     var callbackCount = 0;
+    //     var context = {};
+    //     context.userId = req.user.id;
+    //     var mysql = req.app.get('mysql');
+    //     getCurrentProjects(res, mysql, context, complete);
+    //      function complete(){
+    //         callbackCount++;
+    //         if(callbackCount == 1){
+    //             getPastProjects(res, mysql, context, complete);
+    //         } else if (callbackCount == 2) {
+    //             getUsers(context, complete);
+    //         } else if (callbackCount >= 3) {
+    //             res.render('task', context);
+    //         }
+    //     }
+    // });
 
     // /* Route to DELETE specified Project */
     // router.delete('/:id', requireAuth, function(req, res){
@@ -189,6 +170,26 @@ module.exports = function(){
     //         }
     //     })
     // });
+    /* Display all subtasks of the current task */
+        router.get('/:tid', requireAuth, function(req, res){
+        var callbackCount = 0;
+        var context = {};
+        context.userId = req.user.id;
+        //context.jsscripts = ["updateproject.js"];
+        var mysql = req.app.get('mysql');
+        //getCurrentTasks(req.params.pid, req, res, mysql, context, complete);
+        //getCurrentProject(res, mysql, context, req.params.pid, complete);
+        getCurrentSubTasks(req.params.tid, req, res, mysql, context, complete)
+        function complete(){
+            // console.log(callbackCount);
+            callbackCount++;
+            if(callbackCount == 1){
+                getUsers(context, complete);
+            } else if (callbackCount >= 2) {
+                res.render('task', context);
+            }
+        }
+    });
 
     return router;
 

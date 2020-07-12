@@ -60,7 +60,7 @@
 
     <div class="form-row">
       <div class="form-group col-md-6">
-        <label for="Project_Name">Project Name</label>
+        <label for="Task_Name">Task Name</label>
         <input required type="text" class="form-control" placeholder="Task Name" name="Task_Name">
       </div>
 
@@ -88,6 +88,12 @@
       </div>
 
       <div class="form-group col-md-6">
+        <label for="description">Task Description</label>
+        <input required type="text" class="form-control" placeholder="Task Description" name="description">
+      </div>
+
+
+      {{!-- <div class="form-group col-md-6">
         <label for="user">Project Owner</label>
         <!-- Can be re-used for tasks / subtasks forms -->
         <select class="custom-select mr-sm-2" id="user" name="user" required>
@@ -96,7 +102,7 @@
           <option value={{this.id}}>{{this.name}} - {{this.email}}</option>
           {{/each}}
         </select>
-      </div>
+      </div> --}}
     </div>
 
     <button type="submit" value="Submit" class="btn btn-primary">Submit</button>
@@ -136,7 +142,7 @@
         <td>{{due_date}}</td>
         <td>{{status}}</td>
         <td>
-          <a href="/task/pid/2/tid/{{id}}/"> <button type="button" class="btn btn-success"><i class="fa fa-edit"></i>
+          <a href="/task/{{id}}/"> <button type="button" class="btn btn-success"><i class="fa fa-edit"></i>
             </button></a>
           <button type="button" class="btn btn-danger" onclick="deleteTask({{Project_id}})"><i
               class="fa fa-trash"></i></button>
