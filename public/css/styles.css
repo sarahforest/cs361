@@ -6,7 +6,7 @@ body {
 
 /* sign up page CSS */
 #danger, .danger {
-  color: red;
+  color: #FF6A01;
 }
 
 #sign-up-page h6 {
@@ -180,3 +180,36 @@ body {
 #login_form .input-group:last-of-type {
   margin-bottom: 30px;
 }
+
+/* buttons */
+
+.btn.btn-primary {
+  background: #fcbd01;
+  border-color: #fcbd01;
+}
+
+.btn.btn-primary:hover {
+  background: #fcb101;
+  border-color: #fcb101;
+}
+.btn.btn-danger {
+  background: #FF7D00;
+  border-color: #FF7D00;
+}
+
+.btn.btn-danger:hover {
+  background: #FF6A01;
+  border-color: #FF6A01;
+}
+
+.btn.btn-success {
+  background: #FFD302;
+  border-color: #FFD302;
+}
+
+.btn.btn-success:hover {
+  background: #FFB703;
+  border-color: #FFB703;
+}
+
+
