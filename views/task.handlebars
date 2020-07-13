@@ -65,10 +65,10 @@
       </div>
 
 
-      <div class="form-group col-md-6">
+      <div class="form-group col-md-2">
         <label for="Due_Date">Due Date</label>
         <br />
-        <input required type="date" id="due_date" width="144" placeholder="Due Date" name="Due_Date" />
+        <input required class="form-control" type="date" id="due_date" width="144" placeholder="Due Date" name="Due_Date" />
       </div>
 
     </div>
@@ -86,23 +86,20 @@
           <option value="Completed">Completed</option>
         </select>
       </div>
-
       <div class="form-group col-md-6">
-        <label for="description">Subtask Description</label>
-        <input required type="text" class="form-control" placeholder="Subtask Description" name="description">
-      </div>
-
-
-      {{!-- <div class="form-group col-md-6">
-        <label for="user">Project Owner</label>
+        <label for="user">Assignee</label>
         <!-- Can be re-used for tasks / subtasks forms -->
         <select class="custom-select mr-sm-2" id="user" name="user" required>
-          <option selected value="">Project Owner...</option>
+          <option selected value="">Assignee...</option>
           {{#each users}}
           <option value={{this.id}}>{{this.name}} - {{this.email}}</option>
           {{/each}}
         </select>
-      </div> --}}
+      </div> 
+      <div class="form-group col-md-8">
+        <label for="description">Task Description</label>
+        <textarea required class="form-control" placeholder="Task Description" name="description"></textarea> 
+      </div>
     </div>
 
     <button type="submit" value="Submit" class="btn btn-primary">Submit</button>
