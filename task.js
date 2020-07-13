@@ -121,13 +121,15 @@ module.exports = function(){
                 }
 
                 context.subtasks = results;
-                
-                    context.subtasks.forEach(function(subtask) {
-                        var formatDate = subtask.due_date;
-                        formatDate = formatDate.toISOString().split('T')[0];
-                        var finalDate = formatDate.split("-");
-                        subtask.due_date = finalDate[1] + "-" + finalDate[2] + "-" + finalDate[0];
-                    })
+                    if (context.subtasks) {
+                        context.subtasks.forEach(function(subtask) {
+                            var formatDate = subtask.due_date;
+                            formatDate = formatDate.toISOString().split('T')[0];
+                            var finalDate = formatDate.split("-");
+                            subtask.due_date = finalDate[1] + "-" + finalDate[2] + "-" + finalDate[0];
+                        })
+                    }
+                    
                 
                 complete();
             });
