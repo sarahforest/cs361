@@ -79,6 +79,7 @@ module.exports = function(){
                     formatDate = formatDate.toISOString().split('T')[0];
                     var finalDate = formatDate.split("-");
                     task.due_date = finalDate[1] + "-" + finalDate[2] + "-" + finalDate[0];
+                    task.format_date = finalDate[0] + "-" + finalDate[1]+ "-" + finalDate[2];
                 })
             
             complete();

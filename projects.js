@@ -2,6 +2,9 @@ module.exports = function(){
     var express = require('express');
     var router = express.Router();
     var { requireAuth } = require('./middleware.js');
+    var bodyParser = require('body-parser');
+    var app = express();
+    app.use(bodyParser.urlencoded({extended:true}));
 
     /* Add Project */
     router.post('/', requireAuth, function(req, res)
@@ -69,6 +72,7 @@ module.exports = function(){
                     formatDate = formatDate.toISOString().split('T')[0];
                     var finalDate = formatDate.split("-");
                     project.Due_Date = finalDate[1] + "-" + finalDate[2] + "-" + finalDate[0];
+                    project.Format_Date = finalDate[0] + "-" + finalDate[1]+ "-" + finalDate[2];
                 })
             
             complete();
@@ -95,6 +99,7 @@ module.exports = function(){
                     formatDate = formatDate.toISOString().split('T')[0];
                     var finalDate = formatDate.split("-");
                     project.Due_Date = finalDate[1] + "-" + finalDate[2] + "-" + finalDate[0];
+                    project.Format_Date = finalDate[0] + "-" + finalDate[1]+ "-" + finalDate[2];
                 })
             
             complete();
@@ -121,23 +126,75 @@ module.exports = function(){
         }
     });
 
-    /* Route to DELETE specified Project */
-    router.delete('/:id', requireAuth, function(req, res){
-        console.log(`server: deleting project ${req.params.id}`);
-        
-        // var mysql = req.app.get('mysql');
+    router.post('/update', function(req,res) {
         var mysql = require('./dbcon.js');
-        var sql = "DELETE FROM Projects WHERE Project_ID = ?";
-        var inserts = req.params.id;
+        var sql = "UPDATE Projects " + 
+                  "SET Project_Name = ?, " + 
+                  "Due_Date = ?, " +
+                  "Status = ?, " +
+                  "Project_Owner = ? " + 
+                  "WHERE Project_ID = ?";
+        
+        var inserts = [req.body.name, req.body.due_date, req.body.status, req.body.user, req.body.id];
+        // console.log(inserts)
         sql = mysql.pool.query(sql, inserts, function(error, results, fields){
             if(error){
                 res.write(JSON.stringify(error));
                 res.status(400);
                 res.end();
             } else {
-                res.status(202).end();
+                res.redirect(req.get('referer'));
             }
         })
+    });
+
+    function deleteAssociatedSubTasks(mysql, inserts, res) {
+        var sql = "DELETE FROM subtasks WHERE project_id = ?";
+        sql = mysql.pool.query(sql, inserts, function(error, results, fields){
+            if(error){
+                res.write(JSON.stringify(error));
+                res.status(400);
+                res.end();
+            }
+        })
+    }
+
+    function deleteAssociatedTasks(mysql, inserts, res) {
+        var sql = "DELETE FROM tasks WHERE project_id = ?";
+        sql = mysql.pool.query(sql, inserts, function(error, results, fields){
+            if(error){
+                res.write(JSON.stringify(error));
+                res.status(400);
+                res.end();
+            }
+        })
+    }
+
+    function deleteProject(mysql,inserts, res) {
+        var sql = "DELETE FROM Projects WHERE Project_ID = ?";
+        sql = mysql.pool.query(sql, inserts, function(error, results, fields){
+            if(error){
+                res.write(JSON.stringify(error));
+                res.status(400);
+                res.end();
+            }
+        })
+    }
+
+    /* Route to DELETE specified Project */
+    router.delete('/:id', requireAuth, function(req, res){
+        console.log(`server: deleting project ${req.params.id}`);
+        
+        // var mysql = req.app.get('mysql');
+        var mysql = require('./dbcon.js');
+       
+       
+        var inserts = req.params.id;
+        deleteAssociatedSubTasks(mysql,inserts, res);
+        deleteAssociatedTasks(mysql,inserts, res);
+        deleteProject(mysql,inserts, res);
+        res.status(202).end();
+
     });
 
     return router;
