@@ -8,9 +8,10 @@ Task management system for streamlining workflows with projects, tasks, and subt
 
 ## SQL Database Setup
 
-# Setup for All Database Tables:
+Setup for All Database Tables:
 
 ```
+
 # Drop Existing Tables:
 
 DROP TABLE IF EXISTS `subtasks`;
@@ -87,8 +88,6 @@ INSERT INTO `tasks` (`project_id`, `name`, `assignee_id`, `due_date`, `status`, 
 
 INSERT INTO `subtasks` (`project_id`, `task_id`, `name`, `assignee_id`, `due_date`, `status`, `description`) VALUES
 (2, 1, 'sample subtask', 1, '2020-07-15', 'To Do', 'sample subtask description');
-
-
 
 ```
 
