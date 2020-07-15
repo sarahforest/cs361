@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="/#">EC3 Task Management System</a>
+  <a class="navbar-brand" href="/#">EC<sup>3</sup> Task Management System</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
     aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -7,30 +7,13 @@
   <div class="collapse navbar-collapse" id="navbarText">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href='/#'>Home</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href='/#'>NAV 1</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href='/#'>NAV 2</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href='/#'>NAV 3</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href='/#'>NAV 4</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href='/#'>NAV 5</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href='/#'>NAV 6</a>
+        <a class="nav-link" href='/projects'>My Projects</a>
       </li>
     </ul>
     {{#if userId}}
+    <span class="danger mr-2"> Hi, {{name}}</span>
     <form action="/auth/logout" method="post">
-      <button type="submit" class="nav-item">Log out</button>
+      <button type="submit" class="nav-item btn btn-danger">Log out</button>
     </form>
     {{/if}}
   </div>

@@ -112,6 +112,8 @@ module.exports = function(){
         var callbackCount = 0;
         var context = {};
         context.userId = req.user.id;
+        context.name = req.user.name;
+        console.log(context.name)
         var mysql = req.app.get('mysql');
         getCurrentProjects(res, mysql, context, complete);
          function complete(){

@@ -178,6 +178,7 @@ module.exports = function(){
         var callbackCount = 0;
         var context = {};
         context.userId = req.user.id;
+        context.name = req.user.name;
         //context.jsscripts = ["updateproject.js"];
         var mysql = req.app.get('mysql');
         //getCurrentTasks(req.params.pid, req, res, mysql, context, complete);

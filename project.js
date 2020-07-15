@@ -106,6 +106,8 @@ module.exports = function(){
         var callbackCount = 0;
         var context = {};
         context.userId = req.user.id;
+        context.name = req.user.name;
+       
         context.project_id = req.params.pid;
         context.jsscripts = ["updateproject.js"];
         var mysql = req.app.get('mysql');
@@ -118,7 +120,6 @@ module.exports = function(){
             } else if (callbackCount == 2) {
                 getUsers(context, complete);
             } else if (callbackCount >= 3) {
-                console.log(context)
                 res.render('project', context);
             }
         }
