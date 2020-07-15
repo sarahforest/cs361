@@ -56,19 +56,19 @@
 <!-- ADD A TASK -->
 <div class="container">
   <h2>Add a New Task to this Project</h2>
-  <form id="add_Task" action="/projects" method="post">
+  <form id="add_Task" action="/project" method="post">
 
     <div class="form-row">
       <div class="form-group col-md-6">
-        <label for="Task_Name">Task Name</label>
-        <input required type="text" class="form-control" placeholder="Task Name" name="Task_Name">
+        <label for="name">Task Name</label>
+        <input required type="text" class="form-control" placeholder="Task Name" name="name">
       </div>
 
 
       <div class="form-group col-md-2">
-        <label for="Due_Date">Due Date</label>
+        <label for="due_date">Due Date</label>
         <br />
-        <input required class="form-control" type="date" id="due_date" width="144" placeholder="Due Date" name="Due_Date" />
+        <input required class="form-control" type="date" id="due_date" width="144" placeholder="Due Date" name="due_date" />
       </div>
 
     </div>
@@ -78,7 +78,7 @@
 
       <div class="form-group col-sm-2">
         <label for="status">Status</label>
-        <select required class="custom-select mr-sm-2" id="status" name="Status">
+        <select required class="custom-select mr-sm-2" id="status" name="status">
           <option selected value="">Status...</option>
           <option value="To Do">To Do</option>
           <option value="In Progress">In Progress</option>
@@ -102,6 +102,7 @@
       </div>
     </div>
 
+    <input id="project_id" name="project_id" type="hidden" value="{{project_id}}">
     <button type="submit" value="Submit" class="btn btn-primary">Submit</button>
   </form>
 </div>

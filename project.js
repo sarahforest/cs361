@@ -3,26 +3,26 @@ module.exports = function(){
     var router = express.Router();
     var { requireAuth } = require('./middleware.js');
 
-//     /* Add Task */
-//     router.post('/', requireAuth, function(req, res)
-//     {
-//         var mysql = require('./dbcon.js');
-// 
-//         var sql = "INSERT IGNORE INTO Projects (Project_Name, Status, Project_Owner, Due_Date) VALUES (?,?, ?,?)";
-//    
-//         var inserts = [req.body.Project_Name, req.body.Status, req.body.user, req.body.Due_Date];
-// 
-//         sql = mysql.pool.query(sql,inserts,function(error, results, fields){
-//             if(error){
-//                 console.log(JSON.stringify(error))
-//                 res.write(JSON.stringify(error));
-//                 res.end();
-//             }else{
-//                 res.redirect('/projects');
-//             }
-//         });
-// 
-//     });
+    /* Add Task */
+    router.post('/', requireAuth, function(req, res)
+    {
+        var mysql = require('./dbcon.js');
+
+        var sql = "INSERT IGNORE INTO tasks (project_id, name, assignee_id, due_date, status, description) VALUES (?, ?, ?, ?, ?, ?)";
+   
+        var inserts = [req.body.project_id, req.body.name, req.body.user, req.body.due_date, req.body.status, req.body.description];
+
+        sql = mysql.pool.query(sql,inserts,function(error, results, fields){
+            if(error){
+                console.log(JSON.stringify(error))
+                res.write(JSON.stringify(error));
+                res.end();
+            }else{
+                res.redirect(`/project/${req.body.project_id}`);
+            }
+        });
+
+    });
 
 
     // function that returns the entire list of users
@@ -91,6 +91,7 @@ module.exports = function(){
         var callbackCount = 0;
         var context = {};
         context.userId = req.user.id;
+        context.project_id = req.params.pid;
         context.jsscripts = ["updateproject.js"];
         var mysql = req.app.get('mysql');
         getCurrentTasks(req.params.pid, req, res, mysql, context, complete);
