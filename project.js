@@ -124,22 +124,29 @@ module.exports = function(){
         }
     });
 
-    /* Route to UPDATE specified Project */
-    router.put('/:id', requireAuth, function(req,res){
-        console.log("ok what now?");
-        var mysql = req.app.get('mysql');
-        var sql = "UPDATE Projects SET Project_Name = ? WHERE Project_ID = ?";
-        var inserts = [req.body.Project_Name, req.params.id];
+    router.post('/update', function(req,res) {
+        var mysql = require('./dbcon.js');
+        var sql = "UPDATE tasks " + 
+                  "SET name = ?, " + 
+                  "due_date = ?, " +
+                  "status = ?, " +
+                  "assignee_id = ?, " + 
+                  "description = ? " +
+                  "WHERE id = ?";
+        
+        var inserts = [req.body.name, req.body.due_date, req.body.status, req.body.user, req.body.description, req.body.id];
+        // console.log(inserts)
         sql = mysql.pool.query(sql, inserts, function(error, results, fields){
             if(error){
                 res.write(JSON.stringify(error));
+                res.status(400);
                 res.end();
-            } else{
-                res.status(200);
-                res.end();
+            } else {
+                res.redirect(req.get('referer'));
             }
-        });
+        })
     });
+
 //     /* Route to DELETE specified Project */
 //     router.delete('/:id', requireAuth, function(req, res){
 //         console.log(`server: deleting project ${req.params.id}`);
