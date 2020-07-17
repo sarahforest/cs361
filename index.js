@@ -1,16 +1,16 @@
 var express = require('express');
-//var handlebars = require('express-handlebars').create({defaultLayout:'main'});
 var mysql = require('./dbcon.js');
 var bodyParser = require('body-parser');
 var CryptoJS = require("crypto-js");
 var path = require('path');
 var session = require('express-session');
 const AuthService = require('./auth-service.js');
+const config = require('./config.js');
 
 var app = express();
 
 app.use(session({
-  secret: '7C44-74D44-WppQ3877S', // TODO: Move this into a configuration file.
+  secret: config.appSecret,
   resave: true,
   saveUninitialized: true
 }));
@@ -26,7 +26,6 @@ app.use('/projects', require('./projects.js'));
 app.use('/project', require('./project.js'));
 
 app.use('/task', require('./task.js'));
-
 
 var handlebars = require('express-handlebars').create({
   helpers: {
@@ -55,8 +54,7 @@ var handlebars = require('express-handlebars').create({
           default:
               return options.inverse(this);
       }
-
-  },
+    },
   },
   defaultLayout:'main'
   });
@@ -91,8 +89,7 @@ app.post('/add-new-user', function(req, res) {
       }
       // we have a new user password we need to hash then add to the db
       else {
-        var ciphertext = CryptoJS.AES.encrypt(req.body.user_password, 'secret key 123').toString();
-        // TODO: Move the secret key to a configuration file. 
+        var ciphertext = CryptoJS.AES.encrypt(req.body.user_password, config.crytoSecret).toString();
         // console.log(ciphertext);
         mysql.pool.query(
           "INSERT INTO users (name, email, password) VALUES (?,?,?)",

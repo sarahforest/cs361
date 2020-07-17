@@ -1,7 +1,6 @@
-## SQL Database Setup
+### SQL Database Setup
 
-# Setup for All Database Tables:
-
+## Setup for All Database Tables:
 
 # Drop Existing Tables:
 
@@ -63,7 +62,7 @@ CREATE TABLE subtasks(
     FOREIGN KEY (assignee_id) REFERENCES users(id)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
 
-# Insertion Statements for Sample DB Data (Optional):
+## Insertion Statements for Sample DB Data (Optional):
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`) VALUES
 (1, 'Shelly Armstrong',  'shell38@gmail.com',   'U2FsdGVkX18IawwV/GgjafEReWofS6nXsYDZ9rI5Sw4='), #password
@@ -79,4 +78,3 @@ INSERT INTO `tasks` (`project_id`, `name`, `assignee_id`, `due_date`, `status`, 
 
 INSERT INTO `subtasks` (`project_id`, `task_id`, `name`, `assignee_id`, `due_date`, `status`, `description`) VALUES
 (2, 1, 'sample subtask', 1, '2020-07-15', 'To Do', 'sample subtask description');
-

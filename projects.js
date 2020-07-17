@@ -24,10 +24,7 @@ module.exports = function(){
                 res.redirect('/projects');
             }
         });
-
     });
-
- 
 
     // function that returns the entire list of users as a promise
     function getUsers(context, complete) {
@@ -42,7 +39,7 @@ module.exports = function(){
                 }
             })
       }
- 
+
     /* function to display all CURRENT PROJECTS */
     function getCurrentProjects(res, mysql, context, complete){
         var mysql = require('./dbcon.js');

@@ -4,7 +4,7 @@ const config = require('./config.js');
 
 const AuthService = {
   comparePasswords(password, hash) {
-    const bytes = crypto.AES.decrypt(hash, 'secret key 123');
+    const bytes = crypto.AES.decrypt(hash, config.cryptoSecret);
     const decrypted = bytes.toString(crypto.enc.Utf8);
     return password === decrypted;
   },
