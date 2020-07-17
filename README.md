@@ -12,7 +12,9 @@ Task management system for streamlining workflows with projects, tasks, and subt
 
 4. Log in to your database and run the SQL queries in "EC3_DDL.sql".
 
-5. Run "node index.js 12345" (replacing "12345" with the port you wish to use).
+5. Run "npm install".
+
+6. Run "node index.js 12345" (replacing "12345" with the port you wish to use).
 
 ## High-Level Software Architecture
 
