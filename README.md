@@ -16,7 +16,9 @@ Task management system for streamlining workflows with projects, tasks, and subt
 
 6. Run "node index.js 12345" (replacing "12345" with the port you wish to use).
 
-7. To see sample data, log in as "shell38@gmail.com" using the password "password".
+7. Open a web browser and point it to the correct URL (e.g. "http://flip1.engr.oregonstate.edu:12345/").
+
+8. To see sample data, log in as "shell38@gmail.com" using the password "password".
 
 ## High-Level Software Architecture
 
