@@ -1,5 +1,5 @@
 var express = require('express');
-var handlebars = require('express-handlebars').create({defaultLayout:'main'});
+//var handlebars = require('express-handlebars').create({defaultLayout:'main'});
 var mysql = require('./dbcon.js');
 var bodyParser = require('body-parser');
 var CryptoJS = require("crypto-js");
@@ -15,7 +15,6 @@ app.use(session({
   saveUninitialized: true
 }));
 app.use(express.static(path.join(__dirname, '/public')));
-app.engine('handlebars', handlebars.engine);
 app.use(bodyParser.urlencoded({extended:true}));
 app.set('view engine', 'handlebars');
 app.set('port', process.argv[2]);
@@ -27,6 +26,42 @@ app.use('/projects', require('./projects.js'));
 app.use('/project', require('./project.js'));
 
 app.use('/task', require('./task.js'));
+
+
+var handlebars = require('express-handlebars').create({
+  helpers: {
+    ifCond: function(v1,operator,v2,options) {
+          switch (operator) {
+          case '==':
+              return (v1 == v2) ? options.fn(this) : options.inverse(this);
+          case '===':
+              return (v1 === v2) ? options.fn(this) : options.inverse(this);
+          case '!=':
+              return (v1 != v2) ? options.fn(this) : options.inverse(this);
+          case '!==':
+              return (v1 !== v2) ? options.fn(this) : options.inverse(this);
+          case '<':
+              return (v1 < v2) ? options.fn(this) : options.inverse(this);
+          case '<=':
+              return (v1 <= v2) ? options.fn(this) : options.inverse(this);
+          case '>':
+              return (v1 > v2) ? options.fn(this) : options.inverse(this);
+          case '>=':
+              return (v1 >= v2) ? options.fn(this) : options.inverse(this);
+          case '&&':
+              return (v1 && v2) ? options.fn(this) : options.inverse(this);
+          case '||':
+              return (v1 || v2) ? options.fn(this) : options.inverse(this);
+          default:
+              return options.inverse(this);
+      }
+
+  },
+  },
+  defaultLayout:'main'
+  });
+
+app.engine('handlebars', handlebars.engine);
 
 app.get('/', function(req, res, next) {
   var context = {};

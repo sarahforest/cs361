@@ -127,6 +127,7 @@ module.exports = function(){
                             formatDate = formatDate.toISOString().split('T')[0];
                             var finalDate = formatDate.split("-");
                             subtask.due_date = finalDate[1] + "-" + finalDate[2] + "-" + finalDate[0];
+                            subtask.format_date = finalDate[0] + "-" + finalDate[1]+ "-" + finalDate[2];
                         })
                     }
                     
@@ -177,6 +178,7 @@ module.exports = function(){
         var callbackCount = 0;
         var context = {};
         context.userId = req.user.id;
+        context.name = req.user.name;
         //context.jsscripts = ["updateproject.js"];
         var mysql = req.app.get('mysql');
         //getCurrentTasks(req.params.pid, req, res, mysql, context, complete);

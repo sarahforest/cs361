@@ -213,3 +213,16 @@ body {
 }
 
 
+.table td, .table th {
+  padding: 0.4em !important;
+}
+
+.table .thead-dark th {
+  border-color: #343a40 !important;
+}
+
+
+.table.split {
+  border-top: 4px solid #fcbd01;
+}
+

@@ -84,15 +84,74 @@
         <td {{#if isOverdue}} class="danger"{{/if}}>{{Due_Date}}</td>
         <td>{{Status}}</td>
         <td>
-          <a href="/project/{{Project_ID}}"> <button type="button" class="btn btn-success"><i class="fa fa-edit"></i>
-            </button></a>
-          <button type="button" class="btn btn-danger" onclick="deleteProject({{Project_ID}})"><i
-              class="fa fa-trash"></i></button>
+          <a href="/project/{{Project_ID}}">
+            <button type="button" class="btn btn-success">
+              View Tasks
+            </button>
+          </a>
+         <!--Hide The Edit Button if user is not owner -->
+          {{#ifCond ../../userId '===' Project_Owner}}
+            <button class="btn btn-primary" data-toggle="modal" data-target=".bs-modal-sm2-{{Project_ID}}">
+              <i class="fa fa-edit"></i>
+            </button>
+          {{/ifCond}}
+          <button type="button" class="btn btn-danger" onclick="deleteProject({{Project_ID}})">
+            <i class="fa fa-trash"></i>
+          </button>
+          <div class="modal fade bs-modal-sm2-{{Project_ID}}">
+            <div class="modal-dialog">
+              <div class="modal-content">
+               <div class="modal-header">
+                  <h4 class="modal-title">Edit Project {{Project_Name}}</h4>
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                  <form method="post" action="/projects/update"> 
+                    <div class="form-row">
+                      <div class="form-group col-md-6">
+                        <label for="Project_Name">Project Name</label>
+                        <input required type="text" class="form-control" placeholder="Project Name" name="name" value="{{Project_Name}}" />
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label for="Due_Date">Due Date</label>
+                        <br />
+                        <input required class="form-control" type="date" placeholder="Due Date" name="due_date" value="{{Format_Date}}" />
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="form-group col-sm-4">
+                        <label for="status">Status</label>
+                        <select required class="custom-select mr-sm-2" name="status">
+                          <option {{#ifCond Status '==' 'To Do'}}selected{{/ifCond}} value="To Do">To Do</option>
+                          <option {{#ifCond Status '==' 'In Progress'}}selected{{/ifCond}} value="In Progress">In Progress</option>
+                          <option {{#ifCond Status '==' 'On Hold'}}selected{{/ifCond}} value="On Hold">On Hold</option>
+                          <option {{#ifCond Status '==' 'Completed'}}selected{{/ifCond}} value="Completed">Completed</option>
+                        </select>
+                      </div>
+                      <div class="form-group col-md-8">
+                        <label for="user">Project Owner</label>
+                        <select class="custom-select mr-sm-2" id="user" name="user" required>
+                          {{#each ../users}}
+                          <option {{#ifCond this.id '===' ../../userId}}selected{{/ifCond}} value={{this.id}}>{{this.name}} - {{this.email}}</option>
+                          {{/each}}
+                        </select>
+                      </div>
+                      <input name="userId" type="hidden" value="{{../userId}}" />
+                      <input name="id" type="hidden" value="{{Project_ID}}" />
+                    </div>
+                   </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-primary">Save changes</button>
+                  </form>
+                </div>
+              </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+          </div><!-- /.modal -->
         </td>
       </tr>
       {{/each}}
     </tbody>
-
   </table>
 </div>
 <!-- DISPLAY PROJECTS -->
@@ -121,10 +180,70 @@
         <td>{{Due_Date}}</td>
         <td>{{Status}}</td>
         <td>
-          <a href="/project/{{Project_ID}}"> <button type="button" class="btn btn-success"><i class="fa fa-edit"></i>
-            </button></a>
-          <button type="button" class="btn btn-danger" onclick="deleteProject({{Project_ID}})"><i
-              class="fa fa-trash"></i></button>
+          <a href="/project/{{Project_ID}}"> 
+            <button type="button" class="btn btn-success">
+              View Tasks
+            </button>
+          </a>
+          <!--Hide The Edit Button if user is not owner -->
+          {{#ifCond ../../userId '===' Project_Owner}}
+            <button class="btn btn-primary" data-toggle="modal" data-target=".bs-modal-sm2-{{Project_ID}}">
+              <i class="fa fa-edit"></i>
+            </button>
+          {{/ifCond}}
+          <button type="button" class="btn btn-danger" onclick="deleteProject({{Project_ID}})">
+            <i class="fa fa-trash"></i>
+          </button>
+          <div class="modal fade bs-modal-sm2-{{Project_ID}}">
+            <div class="modal-dialog">
+              <div class="modal-content">
+               <div class="modal-header">
+                  <h4 class="modal-title">Edit Project {{Project_Name}}</h4>
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                  <form method="post" action="/projects/update"> 
+                    <div class="form-row">
+                      <div class="form-group col-md-6">
+                        <label for="Project_Name">Project Name</label>
+                        <input required type="text" class="form-control" placeholder="Project Name" name="name" value="{{Project_Name}}" />
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label for="Due_Date">Due Date</label>
+                        <br />
+                        <input required class="form-control" type="date" placeholder="Due Date" name="due_date" value="{{Format_Date}}" />
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="form-group col-sm-4">
+                        <label for="status">Status</label>
+                        <select required class="custom-select mr-sm-2" name="status">
+                          <option {{#ifCond Status '==' 'To Do'}}selected{{/ifCond}} value="To Do">To Do</option>
+                          <option {{#ifCond Status '==' 'In Progress'}}selected{{/ifCond}} value="In Progress">In Progress</option>
+                          <option {{#ifCond Status '==' 'On Hold'}}selected{{/ifCond}} value="On Hold">On Hold</option>
+                          <option {{#ifCond Status '==' 'Completed'}}selected{{/ifCond}} value="Completed">Completed</option>
+                        </select>
+                      </div>
+                      <div class="form-group col-md-8">
+                        <label for="user">Project Owner</label>
+                        <select class="custom-select mr-sm-2" id="user" name="user" required>
+                          {{#each ../users}}
+                          <option {{#ifCond this.id '===' ../../userId}}selected{{/ifCond}} value={{this.id}}>{{this.name}} - {{this.email}}</option>
+                          {{/each}}
+                        </select>
+                      </div>
+                      <input name="userId" type="hidden" value="{{../userId}}" />
+                      <input name="id" type="hidden" value="{{Project_ID}}" />
+                    </div>
+                   </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-primary">Save changes</button>
+                  </form>
+                </div>
+              </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+          </div><!-- /.modal -->
         </td>
       </tr>
       {{/each}}

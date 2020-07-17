@@ -3,26 +3,26 @@ module.exports = function(){
     var router = express.Router();
     var { requireAuth } = require('./middleware.js');
 
-//     /* Add Task */
-//     router.post('/', requireAuth, function(req, res)
-//     {
-//         var mysql = require('./dbcon.js');
-// 
-//         var sql = "INSERT IGNORE INTO Projects (Project_Name, Status, Project_Owner, Due_Date) VALUES (?,?, ?,?)";
-//    
-//         var inserts = [req.body.Project_Name, req.body.Status, req.body.user, req.body.Due_Date];
-// 
-//         sql = mysql.pool.query(sql,inserts,function(error, results, fields){
-//             if(error){
-//                 console.log(JSON.stringify(error))
-//                 res.write(JSON.stringify(error));
-//                 res.end();
-//             }else{
-//                 res.redirect('/projects');
-//             }
-//         });
-// 
-//     });
+    /* Add Task */
+    router.post('/', requireAuth, function(req, res)
+    {
+        var mysql = require('./dbcon.js');
+
+        var sql = "INSERT IGNORE INTO tasks (project_id, name, assignee_id, due_date, status, description) VALUES (?, ?, ?, ?, ?, ?)";
+   
+        var inserts = [req.body.project_id, req.body.name, req.body.user, req.body.due_date, req.body.status, req.body.description];
+
+        sql = mysql.pool.query(sql,inserts,function(error, results, fields){
+            if(error){
+                console.log(JSON.stringify(error))
+                res.write(JSON.stringify(error));
+                res.end();
+            }else{
+                res.redirect(`/project/${req.body.project_id}`);
+            }
+        });
+
+    });
 
 
     // function that returns the entire list of users
@@ -43,7 +43,7 @@ module.exports = function(){
     /*function that returns selected project for project/view update form*/
     function getCurrentProject(res, mysql, context, pid, complete){
         var mysql = require('./dbcon.js');
-        var sql = "SELECT Project_Name, Due_Date, Status FROM Projects WHERE Project_ID = ?";
+        var sql = "SELECT p.Project_Name, p.Due_Date, p.Status, p.Project_Owner, u.name FROM Projects p LEFT JOIN users u on u.id=p.Project_Owner WHERE Project_ID = ?";
         var inserts = [pid];
         mysql.pool.query(sql, inserts, function(error, results, fields){
             if(error){
@@ -51,6 +51,14 @@ module.exports = function(){
                 res.end();
             }
             context.project = results[0];
+            if (context.project) {
+                var formatDate = context.project.Due_Date;
+                formatDate = formatDate.toISOString().split('T')[0];
+                var finalDate = formatDate.split("-");
+                context.project.Due_Date = finalDate[1] + "-" + finalDate[2] + "-" + finalDate[0];
+            }
+            
+
             complete();
         });
     }
@@ -73,12 +81,20 @@ module.exports = function(){
             }
             // console.log(results);
             context.tasks = results;
-            
+            var currentDate = new Date();
                 context.tasks.forEach(function(task) {
                     var formatDate = task.due_date;
+
+                    if (formatDate <= currentDate) {
+                        task.isOverdue = 1;
+                    } else {
+                        task.isOverdue = 0;
+                    }
+
                     formatDate = formatDate.toISOString().split('T')[0];
                     var finalDate = formatDate.split("-");
                     task.due_date = finalDate[1] + "-" + finalDate[2] + "-" + finalDate[0];
+                    task.format_date = finalDate[0] + "-" + finalDate[1]+ "-" + finalDate[2];
                 })
             
             complete();
@@ -90,14 +106,18 @@ module.exports = function(){
         var callbackCount = 0;
         var context = {};
         context.userId = req.user.id;
+        context.name = req.user.name;
+       
+        context.project_id = req.params.pid;
         context.jsscripts = ["updateproject.js"];
         var mysql = req.app.get('mysql');
         getCurrentTasks(req.params.pid, req, res, mysql, context, complete);
-        getCurrentProject(res, mysql, context, req.params.pid, complete);
         function complete(){
             // console.log(callbackCount);
             callbackCount++;
             if(callbackCount == 1){
+                getCurrentProject(res, mysql, context, req.params.pid, complete);
+            } else if (callbackCount == 2) {
                 getUsers(context, complete);
             } else if (callbackCount >= 3) {
                 res.render('project', context);
@@ -105,22 +125,29 @@ module.exports = function(){
         }
     });
 
-    /* Route to UPDATE specified Project */
-    router.put('/:id', requireAuth, function(req,res){
-        console.log("ok what now?");
-        var mysql = req.app.get('mysql');
-        var sql = "UPDATE Projects SET Project_Name = ? WHERE Project_ID = ?";
-        var inserts = [req.body.Project_Name, req.params.id];
+    router.post('/update', function(req,res) {
+        var mysql = require('./dbcon.js');
+        var sql = "UPDATE tasks " + 
+                  "SET name = ?, " + 
+                  "due_date = ?, " +
+                  "status = ?, " +
+                  "assignee_id = ?, " + 
+                  "description = ? " +
+                  "WHERE id = ?";
+        
+        var inserts = [req.body.name, req.body.due_date, req.body.status, req.body.user, req.body.description, req.body.id];
+        // console.log(inserts)
         sql = mysql.pool.query(sql, inserts, function(error, results, fields){
             if(error){
                 res.write(JSON.stringify(error));
+                res.status(400);
                 res.end();
-            } else{
-                res.status(200);
-                res.end();
+            } else {
+                res.redirect(req.get('referer'));
             }
-        });
+        })
     });
+
 //     /* Route to DELETE specified Project */
 //     router.delete('/:id', requireAuth, function(req, res){
 //         console.log(`server: deleting project ${req.params.id}`);
