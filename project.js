@@ -4,8 +4,7 @@ module.exports = function(){
     var { requireAuth } = require('./middleware.js');
 
     /* Add Task */
-    router.post('/', requireAuth, function(req, res)
-    {
+    router.post('/', requireAuth, function(req, res) {
         var mysql = require('./dbcon.js');
 
         var sql = "INSERT IGNORE INTO tasks (project_id, name, assignee_id, due_date, status, description) VALUES (?, ?, ?, ?, ?, ?)";
@@ -21,9 +20,7 @@ module.exports = function(){
                 res.redirect(`/project/${req.body.project_id}`);
             }
         });
-
     });
-
 
     // function that returns the entire list of users
     function getUsers(context, complete) {
