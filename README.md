@@ -16,6 +16,8 @@ Task management system for streamlining workflows with projects, tasks, and subt
 
 6. Run "node index.js 12345" (replacing "12345" with the port you wish to use).
 
+7. To see sample data, log in as "shell38@gmail.com" using the password "password".
+
 ## High-Level Software Architecture
 
 ![Three-Tiered Software Architecture](https://github.com/sarahforest/cs361/blob/master/architecture.png)
