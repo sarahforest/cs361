@@ -1,12 +1,12 @@
 module.exports = function(){
     var express = require('express');
     var router = express.Router();
+    var mysql = require('./dbcon.js');
     var { requireAuth } = require('./middleware.js');
+    var Utils = require('./utils');
 
     /* Add Task */
     router.post('/', requireAuth, function(req, res) {
-        var mysql = require('./dbcon.js');
-
         var sql = "INSERT IGNORE INTO tasks (project_id, name, assignee_id, due_date, status, description) VALUES (?, ?, ?, ?, ?, ?)";
    
         var inserts = [req.body.project_id, req.body.name, req.body.user, req.body.due_date, req.body.status, req.body.description];
@@ -22,78 +22,32 @@ module.exports = function(){
         });
     });
 
-    // function that returns the entire list of users
-    function getUsers(context, complete) {
-        var mysql = require('./dbcon.js');
-            mysql.pool.query("SELECT id, name, email FROM users", function(error,results) {
-                if(error){
-                    res.write(JSON.stringify(error));
-                    res.end();
-                } else {
-                    context.users = results;
-                    complete();
-                }
-            })
-      }
 
-
-    /*function that returns selected project for project/view update form*/
-    function getCurrentProject(res, mysql, context, pid, complete){
-        var mysql = require('./dbcon.js');
-        var sql = "SELECT p.Project_Name, p.Due_Date, p.Status, p.Project_Owner, u.name FROM Projects p LEFT JOIN users u on u.id=p.Project_Owner WHERE Project_ID = ?";
-        var inserts = [pid];
-        mysql.pool.query(sql, inserts, function(error, results, fields){
+    /* Get all tasks of the current project */
+    function getCurrentTasks(res, context, complete){
+        var sql = `SELECT 
+            t.*,
+            u.name AS assignee_name,
+            pu.user_id,
+            CASE WHEN pu.user_id = p.Project_Owner THEN TRUE ELSE FALSE END AS is_owner,
+            CASE WHEN pu.user_id = t.assignee_id THEN TRUE ELSE FALSE END AS is_assignee
+        FROM (${Utils.sqlProjectUsers()}) pu
+        INNER JOIN Projects p ON pu.project_id = p.Project_ID
+        INNER JOIN tasks t ON pu.project_id = t.project_id
+        INNER JOIN users u ON t.assignee_id = u.id
+        WHERE pu.user_id = ? AND t.project_id = ?
+        ORDER BY due_date ASC`;
+        var inserts = [context.userId, context.project_id];
+        mysql.pool.query(sql, inserts, function(error, results) {
             if(error){
                 res.write(JSON.stringify(error));
                 res.end();
             }
-            context.project = results[0];
-            if (context.project) {
-                var formatDate = context.project.Due_Date;
-                formatDate = formatDate.toISOString().split('T')[0];
-                var finalDate = formatDate.split("-");
-                context.project.Due_Date = finalDate[1] + "-" + finalDate[2] + "-" + finalDate[0];
-            }
-            
-
-            complete();
-        });
-    }
-
-
-    /* function to display all tasks of the current Project */
-    function getCurrentTasks(pid, req, res, mysql, context, complete){
-        var mysql = require('./dbcon.js');
-        var sql = `
-        SELECT id, tasks.project_id, name, assignee_id, tasks.due_date, tasks.status, tasks.description
-        FROM tasks INNER JOIN Projects ON tasks.project_id = Projects.Project_ID 
-        WHERE tasks.project_id = ? AND Projects.Project_Owner = ?
-        ORDER BY Due_Date ASC
-`;
-        mysql.pool.query(sql, [pid, req.user.id], function(error, results, fields)
-        {
-            if(error){
-                res.write(JSON.stringify(error));
-                res.end();
-            }
-            // console.log(results);
+            results.forEach(t => {
+                t.isOverdue = Utils.isOverdue(t.due_date);
+                [t.due_date, t.format_date] = Utils.formatDueDate(t.due_date);
+            });
             context.tasks = results;
-            var currentDate = new Date();
-                context.tasks.forEach(function(task) {
-                    var formatDate = task.due_date;
-
-                    if (formatDate <= currentDate) {
-                        task.isOverdue = 1;
-                    } else {
-                        task.isOverdue = 0;
-                    }
-
-                    formatDate = formatDate.toISOString().split('T')[0];
-                    var finalDate = formatDate.split("-");
-                    task.due_date = finalDate[1] + "-" + finalDate[2] + "-" + finalDate[0];
-                    task.format_date = finalDate[0] + "-" + finalDate[1]+ "-" + finalDate[2];
-                })
-            
             complete();
         });
     }
@@ -104,18 +58,14 @@ module.exports = function(){
         var context = {};
         context.userId = req.user.id;
         context.name = req.user.name;
-       
         context.project_id = req.params.pid;
-        context.jsscripts = ["updateproject.js"];
-        var mysql = req.app.get('mysql');
-        getCurrentTasks(req.params.pid, req, res, mysql, context, complete);
+        getCurrentTasks(res, context, complete);
         function complete(){
-            // console.log(callbackCount);
             callbackCount++;
             if(callbackCount == 1){
-                getCurrentProject(res, mysql, context, req.params.pid, complete);
+                Utils.getCurrentProject(res, context, complete);
             } else if (callbackCount == 2) {
-                getUsers(context, complete);
+                Utils.getUsers(res, context, complete);
             } else if (callbackCount >= 3) {
                 res.render('project', context);
             }
@@ -123,7 +73,6 @@ module.exports = function(){
     });
 
     router.post('/update', function(req,res) {
-        var mysql = require('./dbcon.js');
         var sql = "UPDATE tasks " + 
                   "SET name = ?, " + 
                   "due_date = ?, " +
@@ -144,25 +93,6 @@ module.exports = function(){
             }
         })
     });
-
-//     /* Route to DELETE specified Project */
-//     router.delete('/:id', requireAuth, function(req, res){
-//         console.log(`server: deleting project ${req.params.id}`);
-//         
-//         // var mysql = req.app.get('mysql');
-//         var mysql = require('./dbcon.js');
-//         var sql = "DELETE FROM Projects WHERE Project_ID = ?";
-//         var inserts = req.params.id;
-//         sql = mysql.pool.query(sql, inserts, function(error, results, fields){
-//             if(error){
-//                 res.write(JSON.stringify(error));
-//                 res.status(400);
-//                 res.end();
-//             } else {
-//                 res.status(202).end();
-//             }
-//         })
-//     });
 
     return router;
 

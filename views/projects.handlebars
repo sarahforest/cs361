@@ -54,10 +54,6 @@
 </div>
 
 
-
-<!-- ADD PROJECTS -->
-
-
 <!-- DISPLAY PROJECTS -->
 </div>
 <p></p>
@@ -89,15 +85,15 @@
               View Tasks
             </button>
           </a>
-         <!--Hide The Edit Button if user is not owner -->
-          {{#ifCond ../../userId '===' Project_Owner}}
+         <!--Hide The Edit and Delete Button if user is not owner -->
+          {{#if is_owner}}
             <button class="btn btn-primary" data-toggle="modal" data-target=".bs-modal-sm2-{{Project_ID}}">
               <i class="fa fa-edit"></i>
             </button>
-          {{/ifCond}}
-          <button type="button" class="btn btn-danger" onclick="deleteProject({{Project_ID}})">
-            <i class="fa fa-trash"></i>
-          </button>
+            <button type="button" class="btn btn-danger" onclick="deleteProject({{Project_ID}})">
+              <i class="fa fa-trash"></i>
+            </button>
+          {{/if}}
           <div class="modal fade bs-modal-sm2-{{Project_ID}}">
             <div class="modal-dialog">
               <div class="modal-content">
@@ -185,15 +181,15 @@
               View Tasks
             </button>
           </a>
-          <!--Hide The Edit Button if user is not owner -->
-          {{#ifCond ../../userId '===' Project_Owner}}
+          <!--Hide The Edit and Delete Button if user is not owner -->
+          {{#if is_owner}}
             <button class="btn btn-primary" data-toggle="modal" data-target=".bs-modal-sm2-{{Project_ID}}">
               <i class="fa fa-edit"></i>
             </button>
-          {{/ifCond}}
-          <button type="button" class="btn btn-danger" onclick="deleteProject({{Project_ID}})">
-            <i class="fa fa-trash"></i>
-          </button>
+            <button type="button" class="btn btn-danger" onclick="deleteProject({{Project_ID}})">
+              <i class="fa fa-trash"></i>
+            </button>
+          {{/if}}
           <div class="modal fade bs-modal-sm2-{{Project_ID}}">
             <div class="modal-dialog">
               <div class="modal-content">
