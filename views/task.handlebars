@@ -20,7 +20,7 @@
         <div class="form-group col-md-2">
           <label for="Due_Date">Due Date</label>
           <br />
-          <input required class="form-control" type="date" id="due_date" width="144" placeholder="Due Date" name="Due_Date" />
+          <input required class="form-control" type="date" id="due_date" width="144" placeholder="Due Date" name="due_date" />
         </div>
 
       </div>
@@ -29,7 +29,7 @@
       <div class="form-row">
         <div class="form-group col-sm-2">
           <label for="status">Status</label>
-          <select required class="custom-select mr-sm-2" id="status" name="Status">
+          <select required class="custom-select mr-sm-2" id="status" name="status">
             <option selected value="">Status...</option>
             <option value="To Do">To Do</option>
             <option value="In Progress">In Progress</option>
@@ -52,7 +52,8 @@
           <textarea required maxlength="500" class="form-control" placeholder="Subtask Description" name="description"></textarea> 
         </div>
       </div>
-
+      <input id="project_id" name="project_id" type="hidden" value="{{project_id}}">
+      <input id="task_id" name="task_id" type="hidden" value="{{task_id}}">
       <button type="submit" value="Submit" class="btn btn-primary">Submit</button>
     </form>
   </div>

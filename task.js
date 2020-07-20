@@ -5,7 +5,26 @@ module.exports = function(){
     var { requireAuth } = require('./middleware.js');
     var Utils = require('./utils');
 
+    /* Add Subtask */
+    router.post('/', requireAuth, function(req, res) {
+        var sql = "INSERT IGNORE INTO subtasks (project_id, task_id, name, assignee_id, due_date, status, description) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        var inserts = [req.body.project_id, req.body.task_id, req.body.name, req.body.user, req.body.due_date, req.body.status, req.body.description];
+        
+        console.log(inserts);
+        sql = mysql.pool.query(sql,inserts,function(error, results, fields){
+            if(error){
+                console.log(JSON.stringify(error))
+                res.write(JSON.stringify(error));
+                res.end();
+            }else{
+                res.redirect(`/task/${req.body.task_id}`);
+            }
+        });
+       
+    });
+
     /* Get all subtasks of the current project */
+    
     function getCurrentSubTasks(res, context, complete) {
         var sql = `SELECT 
             st.*,
