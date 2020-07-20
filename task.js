@@ -98,6 +98,24 @@ module.exports = function(){
         })
     });
 
+    router.post('/update-status', function(req,res) {
+        var sql = "UPDATE subtasks " + 
+                  "SET status = ? " +
+                  "WHERE id = ?";
+        
+        var inserts = [req.body.status, req.body.id];
+        // console.log(inserts)
+        sql = mysql.pool.query(sql, inserts, function(error, results, fields){
+            if(error){
+                res.write(JSON.stringify(error));
+                res.status(400);
+                res.end();
+            } else {
+                res.redirect(req.get('referer'));
+            }
+        })
+    });
+
 
     return router;
 

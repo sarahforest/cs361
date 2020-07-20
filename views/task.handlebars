@@ -140,12 +140,12 @@
           {{/if}}
           <div class="modal fade bs-modal-sm2-{{id}}">
             <div class="modal-dialog">
-              {{#if is_owner}}
                 <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">Edit Subtask {{name}}</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                   </div>
+                  {{#if is_owner}}
                   <div class="modal-body">
                     <form method="post" action="/task/update"> 
                       <div class="form-row">
@@ -172,7 +172,7 @@
                         <div class="form-group col-md-8">
                           <label for="user">Assignee</label>
                           <select class="custom-select mr-sm-2" id="user" name="user" required>
-                            {{#each ../users}}
+                            {{#each ../../users}}
                             <option {{#ifCond this.id '===' ../assignee_id}}selected{{/ifCond}} value={{this.id}}>{{this.name}} - {{this.email}}</option>
                             {{/each}}
                           </select>
@@ -192,10 +192,24 @@
                   </div>
                 </div><!-- /.modal-content -->
               {{else}}<!-- if is assignee -->
-                <div class="modal-content">
-                  
-                  <h4>subtask assignee edits status</h4>
-
+                <div class="modal-body">
+                  <form method="post" action="/task/update-status"> 
+                  <div class="form-row">
+                        <div class="form-group col-sm-4">
+                          <label for="status">Status</label>
+                          <select required class="custom-select mr-sm-2" name="status">
+                            <option {{#ifCond status '==' 'To Do'}}selected{{/ifCond}} value="To Do">To Do</option>
+                            <option {{#ifCond status '==' 'In Progress'}}selected{{/ifCond}} value="In Progress">In Progress</option>
+                            <option {{#ifCond status '==' 'On Hold'}}selected{{/ifCond}} value="On Hold">On Hold</option>
+                            <option {{#ifCond status '==' 'Completed'}}selected{{/ifCond}} value="Completed">Completed</option>
+                          </select>
+                        </div>
+                        <input name="id" type="hidden" value="{{id}}" />
+                    </div>
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                  </form>
                 </div><!-- /.modal-content -->
               {{/if}}
             </div><!-- /.modal-dialog -->
