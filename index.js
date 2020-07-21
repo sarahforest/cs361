@@ -1,11 +1,12 @@
 var express = require('express');
-var mysql = require('./dbcon.js');
 var bodyParser = require('body-parser');
 var CryptoJS = require("crypto-js");
 var path = require('path');
 var session = require('express-session');
-const AuthService = require('./auth-service.js');
+
 const config = require('./config.js');
+var mysql = require('./dbcon.js');
+const AuthService = require('./auth-service.js');
 
 var app = express();
 
@@ -29,7 +30,7 @@ app.use('/task', require('./task.js'));
 
 var handlebars = require('express-handlebars').create({
   helpers: {
-    ifCond: function(v1,operator,v2,options) {
+    ifCond: function(v1, operator, v2, options) {
           switch (operator) {
           case '==':
               return (v1 == v2) ? options.fn(this) : options.inverse(this);
