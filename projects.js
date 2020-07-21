@@ -1,13 +1,15 @@
 module.exports = function(){
     var express = require('express');
-    var router = express.Router();
+    var bodyParser = require('body-parser');
+    
     var mysql = require('./dbcon.js');
     var { requireAuth } = require('./middleware.js');
-    var bodyParser = require('body-parser');
+    var Utils = require('./utils');
+    
     var app = express();
     app.use(bodyParser.urlencoded({extended:true}));
-
-    var Utils = require('./utils');
+    
+    var router = express.Router();
 
     /* Add project */
     router.post('/', requireAuth, function(req, res)

@@ -1,5 +1,6 @@
 const crypto = require("crypto-js");
 const jwt = require('jsonwebtoken');
+
 const config = require('./config.js');
 
 const AuthService = {

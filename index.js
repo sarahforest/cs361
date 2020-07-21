@@ -15,10 +15,11 @@ app.use(session({
   resave: true,
   saveUninitialized: true
 }));
-app.use(express.static(path.join(__dirname, '/public')));
 app.use(bodyParser.urlencoded({extended:true}));
 app.set('view engine', 'handlebars');
 app.set('port', process.argv[2]);
+
+app.use(express.static(path.join(__dirname, '/public')));
 
 app.use('/auth', require('./auth-router.js'));
 
