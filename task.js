@@ -10,7 +10,7 @@ module.exports = function(){
         var sql = "INSERT IGNORE INTO subtasks (project_id, task_id, name, assignee_id, due_date, status, description) VALUES (?, ?, ?, ?, ?, ?, ?)";
         var inserts = [req.body.project_id, req.body.task_id, req.body.name, req.body.user, req.body.due_date, req.body.status, req.body.description];
         
-        console.log(inserts);
+        //console.log(inserts);
         sql = mysql.pool.query(sql,inserts,function(error, results, fields){
             if(error){
                 console.log(JSON.stringify(error))
@@ -115,6 +115,27 @@ module.exports = function(){
                 res.redirect(req.get('referer'));
             }
         })
+    });
+
+    function deleteSubtask(inserts, res) {
+        var sql = "DELETE FROM subtasks WHERE id = ?";
+        sql = mysql.pool.query(sql, inserts, function(error, results, fields){
+            if(error){
+                res.write(JSON.stringify(error));
+                res.status(400);
+                res.end();
+            }
+        })
+    }
+
+    /* Route to DELETE specified Subtask */
+    router.delete('/:id', requireAuth, function(req, res){
+        //console.log(`server: deleting task ${req.params.id}`);
+
+        var inserts = req.params.id;
+        deleteSubtask(inserts, res);
+        res.status(202).end();
+
     });
 
     router.post('/update-status', function(req,res) {

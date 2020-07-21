@@ -10,6 +10,30 @@ function deleteProject(id){
 	});
 };
 
+function deleteTask(id){
+	console.log(`client: requesting to delete task ${id}`);
+	
+	$.ajax({
+		url:'/project/' + id,
+		type: 'DELETE',
+		success: function(result){
+			window.location.reload(true);
+		}
+	});
+};
+
+function deleteSubtask(id){
+	console.log(`client: requesting to delete task ${id}`);
+	
+	$.ajax({
+		url:'/task/' + id,
+		type: 'DELETE',
+		success: function(result){
+			window.location.reload(true);
+		}
+	});
+};
+
 function updateProject(pid){
     $.ajax({
         url: '/project/' + pid,
