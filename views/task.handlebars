@@ -114,6 +114,7 @@
         <th scope="col">Description</th>
         <th scope="col">Due Date</th>
         <th scope="col">Status</th>
+        <th scope="col">Assignee</th>
         <th scope="col">Manage</th>
       </tr>
     </thead>
@@ -126,6 +127,7 @@
         <td>{{description}}</td>
         <td {{#if isOverdue}} class="danger"{{/if}}>{{due_date}}</td>
         <td>{{status}}</td>
+        <td>{{assignee_name}}</td>
         <td>
           <!--Hide The Edit Button if user is not owner -->
           {{#ifCond is_owner '||' is_assignee}}
