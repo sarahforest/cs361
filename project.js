@@ -1,9 +1,11 @@
 module.exports = function(){
     var express = require('express');
-    var router = express.Router();
+    
     var mysql = require('./dbcon.js');
     var { requireAuth } = require('./middleware.js');
     var Utils = require('./utils');
+    
+    var router = express.Router();
 
     /* Add Task */
     router.post('/', requireAuth, function(req, res) {
@@ -11,7 +13,7 @@ module.exports = function(){
    
         var inserts = [req.body.project_id, req.body.name, req.body.user, req.body.due_date, req.body.status, req.body.description];
 
-        sql = mysql.pool.query(sql,inserts,function(error, results, fields){
+        sql = mysql.pool.query(sql, inserts, function(error, results, fields) {
             if(error){
                 console.log(JSON.stringify(error))
                 res.write(JSON.stringify(error));

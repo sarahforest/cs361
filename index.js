@@ -1,3 +1,5 @@
+// Require necessary packages/files:
+
 var express = require('express');
 var bodyParser = require('body-parser');
 var CryptoJS = require("crypto-js");
@@ -7,6 +9,8 @@ var session = require('express-session');
 const config = require('./config.js');
 var mysql = require('./dbcon.js');
 const AuthService = require('./auth-service.js');
+
+// Set up the server:
 
 var app = express();
 
@@ -18,16 +22,6 @@ app.use(session({
 app.use(bodyParser.urlencoded({extended:true}));
 app.set('view engine', 'handlebars');
 app.set('port', process.argv[2]);
-
-app.use(express.static(path.join(__dirname, '/public')));
-
-app.use('/auth', require('./auth-router.js'));
-
-app.use('/projects', require('./projects.js'));
-
-app.use('/project', require('./project.js'));
-
-app.use('/task', require('./task.js'));
 
 var handlebars = require('express-handlebars').create({
   helpers: {
@@ -59,9 +53,21 @@ var handlebars = require('express-handlebars').create({
     },
   },
   defaultLayout:'main'
-  });
+});
 
 app.engine('handlebars', handlebars.engine);
+
+// Set up routes:
+
+app.use(express.static(path.join(__dirname, '/public')));
+
+app.use('/auth', require('./auth-router.js'));
+
+app.use('/projects', require('./projects.js'));
+
+app.use('/project', require('./project.js'));
+
+app.use('/task', require('./task.js'));
 
 app.get('/', function(req, res, next) {
   var context = {};
@@ -124,6 +130,8 @@ app.use(function(err, req, res, next){
   res.status(500);
   res.render('500');
 });
+
+// Start the server:
 
 app.listen(app.get('port'), function(){
   console.log('Express started on http://localhost:' + app.get('port') + '; press Ctrl-C to terminate.');

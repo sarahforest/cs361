@@ -1,4 +1,5 @@
 var mysql = require('mysql');
+
 const config = require('./config');
 
 var pool = mysql.createPool({
@@ -8,4 +9,5 @@ var pool = mysql.createPool({
   password        : config.password,
   database        : config.database
 });
+
 module.exports.pool = pool;
