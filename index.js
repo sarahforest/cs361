@@ -97,7 +97,7 @@ app.post('/add-new-user', function(req, res) {
       }
       // we have a new user password we need to hash then add to the db
       else {
-        var ciphertext = CryptoJS.AES.encrypt(req.body.user_password, config.crytoSecret).toString();
+        var ciphertext = CryptoJS.AES.encrypt(req.body.user_password, config.cryptoSecret).toString();
         // console.log(ciphertext);
         mysql.pool.query(
           "INSERT INTO users (name, email, password) VALUES (?,?,?)",
