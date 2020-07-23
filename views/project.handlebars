@@ -43,9 +43,9 @@
         <label for="user">Assignee</label>
         <!-- Can be re-used for tasks / subtasks forms -->
         <select class="custom-select mr-sm-2" id="user" name="user" required>
-          <option selected value="">Assignee...</option>
+          <option value="">Assignee...</option>
           {{#each users}}
-          <option value={{this.id}}>{{this.name}} - {{this.email}}</option>
+          <option {{#ifCond ../userId '==' this.id}}selected{{/ifCond}} value={{this.id}}>{{this.name}} - {{this.email}}</option>
           {{/each}}
         </select>
       </div>
