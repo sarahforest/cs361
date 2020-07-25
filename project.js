@@ -45,12 +45,14 @@ module.exports = function(){
                 res.write(JSON.stringify(error));
                 res.end();
             }
-            results.forEach(t => {
-                t.isOverdue = Utils.isOverdue(t.due_date);
-                [t.due_date, t.format_date] = Utils.formatDueDate(t.due_date);
-            });
-            context.tasks = results;
-            complete();
+            else {
+                results.forEach(t => {
+                    t.isOverdue = Utils.isOverdue(t.due_date);
+                    [t.due_date, t.format_date] = Utils.formatDueDate(t.due_date);
+                });
+                context.tasks = results;
+                complete();
+            }
         });
     }
 

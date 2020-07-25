@@ -45,13 +45,15 @@ module.exports = function(){
                 res.write(JSON.stringify(error));
                 res.end();
             }
-            results.forEach(p => {
-                p.isOverdue = Utils.isOverdue(p.Due_Date);
-                [p.Due_Date, p.Format_Date] = Utils.formatDueDate(p.Due_Date);
-            })
-            context.currentprojects = results.filter(p => p.Status != 'Completed');
-            context.pastprojects = results.filter(p => p.Status == 'Completed');
-            complete();
+            else {
+                results.forEach(p => {
+                    p.isOverdue = Utils.isOverdue(p.Due_Date);
+                    [p.Due_Date, p.Format_Date] = Utils.formatDueDate(p.Due_Date);
+                })
+                context.currentprojects = results.filter(p => p.Status != 'Completed');
+                context.pastprojects = results.filter(p => p.Status == 'Completed');
+                complete();
+            }
         });
     }
 

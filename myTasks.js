@@ -48,14 +48,15 @@ router
             res.write(JSON.stringify(error));
             res.end();
         }
-        results.forEach(t => {
-            t.isOverdue = Utils.isOverdue(t.due_date);
-            [t.due_date, t.format_date] = Utils.formatDueDate(t.due_date);
-        });
-        console.log(results[1]);
-        context.currenttasks = results.filter(t => t.status != 'Completed');
-        context.pasttasks = results.filter(t => t.status == 'Completed');
-        complete();
+        else {
+            results.forEach(t => {
+                t.isOverdue = Utils.isOverdue(t.due_date);
+                [t.due_date, t.format_date] = Utils.formatDueDate(t.due_date);
+            });
+            context.currenttasks = results.filter(t => t.status != 'Completed');
+            context.pasttasks = results.filter(t => t.status == 'Completed');
+            complete();
+        }
     });
   }
 

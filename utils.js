@@ -23,12 +23,14 @@ const Utils = {
         res.write(JSON.stringify(error));
         res.end();
       }
-      if (results[0]) {
-        [results[0].Due_Date] = Utils.formatDueDate(results[0].Due_Date);
-        context.project = results[0];
-        context.project.is_owner = context.userId == results[0].Project_Owner;
+      else {
+        if (results[0]) {
+          [results[0].Due_Date] = Utils.formatDueDate(results[0].Due_Date);
+          context.project = results[0];
+          context.project.is_owner = context.userId == results[0].Project_Owner;
+        }
+        complete();
       }
-      complete();
     });
   },
   

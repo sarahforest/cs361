@@ -44,12 +44,14 @@ module.exports = function(){
                 res.write(JSON.stringify(error));
                 res.end();
             }
-            results.forEach(st => {
-                st.isOverdue = Utils.isOverdue(st.due_date);
-                [st.due_date, st.format_date] = Utils.formatDueDate(st.due_date);
-            })
-            context.subtasks = results;
-            complete();
+            else {
+                results.forEach(st => {
+                    st.isOverdue = Utils.isOverdue(st.due_date);
+                    [st.due_date, st.format_date] = Utils.formatDueDate(st.due_date);
+                })
+                context.subtasks = results;
+                complete();
+            }
         });
     }
 
@@ -62,12 +64,14 @@ module.exports = function(){
                 res.write(JSON.stringify(error));
                 res.end();
             }
-            if (results[0]) {
-                [results[0].due_date] = Utils.formatDueDate(results[0].due_date);
-                context.task = results[0];
-                context.project_id = results[0].project_id;
+            else {
+                if (results[0]) {
+                    [results[0].due_date] = Utils.formatDueDate(results[0].due_date);
+                    context.task = results[0];
+                    context.project_id = results[0].project_id;
+                }
+                complete();
             }
-            complete();
         });
     }
 
