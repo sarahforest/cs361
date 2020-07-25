@@ -5,7 +5,7 @@
 <br />
 <!--Hide The Add Subtask Form if user is not owner -->
 {{#if project.is_owner}}
-  <!-- ADD A TASK -->
+  <!-- ADD A SUBTASK -->
   <div class="container">
     <h2>Add a New Subtask to this Task</h2>
     <form id="add_Subtask" action="/task" method="post">
@@ -60,8 +60,7 @@
 {{/if}}
 
 
-<!-- DISPLAY PROJECTS -->
-</div>
+<!-- DISPLAY SUBTASKS -->
 <p></p>
 <div class="container">
   <h2>Subtasks for This Task</h2>
@@ -224,4 +223,4 @@
 
   </table>
 </div>
-<!-- DISPLAY PROJECTS -->
+<!-- DISPLAY SUBTASKS -->

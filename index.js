@@ -69,6 +69,8 @@ app.use('/project', require('./project.js'));
 
 app.use('/task', require('./task.js'));
 
+app.use('/mytasks', require('./myTasks.js'));
+
 app.get('/', function(req, res, next) {
   var context = {};
   res.render('signup', context);
