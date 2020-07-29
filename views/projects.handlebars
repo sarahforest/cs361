@@ -67,6 +67,7 @@
         <th scope="col">Name</th>
         <th scope="col">Due Date</th>
         <th scope="col">Status</th>
+        <th scope="col">Owner</th>
         <th scope="col">Manage</th>
       </tr>
     </thead>
@@ -78,6 +79,7 @@
         <td>{{Project_Name}}</td>
         <td {{#if isOverdue}} class="danger"{{/if}}>{{Due_Date}}</td>
         <td>{{Status}}</td>
+        <td>{{name}}</td>
         <td>
           <a href="/project/{{Project_ID}}">
             <button type="button" class="btn btn-success">
@@ -163,6 +165,7 @@
         <th scope="col">Name</th>
         <th scope="col">Due Date</th>
         <th scope="col">Status</th>
+        <th scope="col">Owner</th>
         <th scope="col">Manage</th>
       </tr>
     </thead>
@@ -174,6 +177,7 @@
         <td>{{Project_Name}}</td>
         <td>{{Due_Date}}</td>
         <td>{{Status}}</td>
+        <td>{{name}}</td>
         <td>
           <a href="/project/{{Project_ID}}"> 
             <button type="button" class="btn btn-success">
