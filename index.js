@@ -71,6 +71,8 @@ app.use('/task', require('./task.js'));
 
 app.use('/mytasks', require('./myTasks.js'));
 
+app.use('/pass/reset', require('./reset.js'));
+
 app.get('/', function(req, res, next) {
   var context = {};
   res.render('signup', context);
@@ -79,6 +81,15 @@ app.get('/', function(req, res, next) {
 app.get('/login', function(req, res, next) {
   const context = { email: '', password: '' };
   res.render('login', context);
+});
+
+app.get('/reset', function(req, res, next) {
+  const context = { email: ''};
+  res.render('reset', context);
+});
+
+app.post('/pass/reset', function(req, res) {
+  console.log(req.body.user_email);
 });
 
 app.post('/add-new-user', function(req, res) {

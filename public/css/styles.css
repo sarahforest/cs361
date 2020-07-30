@@ -181,6 +181,64 @@ body {
   margin-bottom: 30px;
 }
 
+/* reset page CSS */
+#reset-page #danger {
+  color: red;
+}
+
+#reset-page * {
+  box-sizing: border-box;
+}
+
+#reset-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+#reset-page .form-content {
+  width: 50%;
+  max-width: 600px;
+  background-color: white;
+  border-radius: 3px;
+  border: 1px solid #808080;
+  padding: 2% 5%;
+}
+
+#reset-page label {
+  margin: 10px 0;
+  display: block;
+}
+
+#reset-page input {
+  background: none;
+  border: 1px solid #808080;
+  border-radius: 0px;
+  width: 100%;
+  padding: 10px;
+}
+
+#reset-page .button.button-block {
+  display: block;
+  margin-top: 20px;
+  background: #fcbd01;
+  border-color: #fcbd01;
+  color: #fff;
+  font-size: 0.9em;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+#reset-page .button.button-block:hover {
+  background: #fcb101;
+  border-color: #fcb101;
+}
+
+#reset_form .input-group:last-of-type {
+  margin-bottom: 30px;
+}
+
 /* buttons */
 
 .btn.btn-primary {
