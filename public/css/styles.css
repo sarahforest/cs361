@@ -186,18 +186,18 @@ body {
   color: red;
 }
 
-#reset-page * {
+#reset-page *, #forgot-page * {
   box-sizing: border-box;
 }
 
-#reset-page {
+#reset-page, #forgot-page {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
 }
 
-#reset-page .form-content {
+#reset-page .form-content, #forgot-page .form-content {
   width: 50%;
   max-width: 600px;
   background-color: white;
@@ -206,12 +206,12 @@ body {
   padding: 2% 5%;
 }
 
-#reset-page label {
+#reset-page label, #forgot-page label {
   margin: 10px 0;
   display: block;
 }
 
-#reset-page input {
+#reset-page input, #forgot-page input {
   background: none;
   border: 1px solid #808080;
   border-radius: 0px;
@@ -219,7 +219,7 @@ body {
   padding: 10px;
 }
 
-#reset-page .button.button-block {
+#reset-page .button.button-block, #forgot-page .button.button-block {
   display: block;
   margin-top: 20px;
   background: #fcbd01;
@@ -230,12 +230,12 @@ body {
   letter-spacing: 1px;
 }
 
-#reset-page .button.button-block:hover {
+#reset-page .button.button-block:hover, #forgot-page .button.button-block:hover {
   background: #fcb101;
   border-color: #fcb101;
 }
 
-#reset_form .input-group:last-of-type {
+#reset_form .input-group:last-of-type, #forgot-page .input-group:last-of-type {
   margin-bottom: 30px;
 }
 
@@ -282,5 +282,15 @@ body {
 
 .table.split {
   border-top: 4px solid #fcbd01;
+}
+
+#login-page .login-section {
+  color: #FFB703;
+}
+
+#login-page .login-section a, #forgot-page a, #reset-page a {
+  color: #FFB703 !important;
+  text-decoration: underline !important;
+  cursor: pointer !important;
 }
 

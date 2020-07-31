@@ -1,20 +1,25 @@
 <div id="reset-page">
-	<div class="form-content">
-		<h1>Enter Email Address</h1>
-		<form action="/pass/reset" method="post" id="reset_form">
-			<div class="input-group">
-				<label>Email</label>
-				<input 
-					name="user_email" 
-					id="userEmail" 
-					type="email" 
-					{{#if email}} value={{email}} {{/if}} 
-					required
-				/>
-			</div>
-			<div class="input-group">
-				<input class="button button-block" type="submit" value="Reset Password" />
-			</div>
-		</form>
-	</div>
+    <div class="form-content">
+        <h1>Reset Password</h1>
+        <hr/>
+        {{#if errors}}
+          <div id='danger'>{{errors}} <a href={{link}}>Reset password.</a></div>
+        {{/if}}
+        {{#if info}}
+            <div id='danger'>{{info}} <a href={{link}}>Login.</a></div>
+         {{/if}}
+         {{#if showForm}}
+            <form action="/reset-password" method="post">
+                <div class="input-group">
+                    <label>New Password</label>
+                    <input name="password" type="password" required/>
+                    <input name="id" type="hidden" value={{id}} />
+                    <input name="token" type="hidden" value={{token}} />
+                </div>
+                <div class="input-group">
+                <input class="button button-block" type="submit" value="Submit" />
+              </div>
+            </form>
+       {{/if}}
+    </div>
 </div>
