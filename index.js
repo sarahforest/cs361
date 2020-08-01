@@ -3,6 +3,8 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var CryptoJS = require("crypto-js");
+var crypto = require("crypto");
+var nodemailer = require('nodemailer');
 var path = require('path');
 var session = require('express-session');
 
@@ -81,6 +83,160 @@ app.get('/', function(req, res, next) {
 app.get('/login', function(req, res, next) {
   const context = { email: '', password: '' };
   res.render('login', context);
+});
+
+app.get('/forgot', function(req, res, next) {
+  const context = { email: ''};
+  res.render('forgot', context);
+});
+
+
+function getToken(res, user, complete) {
+  crypto.randomBytes(20, function(err, buf) {
+    var token = buf.toString('hex');
+    user.resetPasswordToken = token;
+    complete();
+  });
+}
+
+function checkIfUserExists(email, res, user, complete) {
+  mysql.pool.query(
+    "SELECT id from users where email=" + mysql.pool.escape(email),
+    function(err, result) {
+      // if error, handle by outputting issue encountered
+      if (err) {
+        console.log(JSON.stringify(err));
+        res.write(JSON.stringify(err));
+        res.end();
+      }
+      // if id exists in the db, user already exists, don't proceed with sign up
+      else if (!result[0] || !result[0].id) {
+        console.log("Doesnt exist")
+        res.render('forgot', {
+          errors: 'Email address doesn\'t exist.',
+        });
+      }
+      else {
+        user.email = email;
+        user.id = result[0].id;
+        user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+        complete();
+      }
+    })
+}
+
+function updateUserTokens(res, user, complete) {
+  var sql = "UPDATE users SET token = ?, tokenExpiration = ? WHERE id = ?";
+  var inserts = [user.resetPasswordToken, user.resetPasswordExpires, user.id];
+        sql = mysql.pool.query(sql, inserts, function(error, results, fields){
+            if(error){
+                res.write(JSON.stringify(error));
+                res.status(400);
+                res.end();
+            }
+            complete();
+        })
+}
+
+app.post('/pass/reset', function(req, res, next) {
+  var callbackCount = 0;
+  var user = {};
+
+  getToken(res, user, complete);
+  function complete(){
+      callbackCount++;
+      if(callbackCount == 1){
+          checkIfUserExists(req.body.user_email, res, user, complete);
+      } else if (callbackCount == 2) {
+        updateUserTokens(res, user, complete);
+      } else if (callbackCount == 3) {
+
+        const transporter = nodemailer.createTransport({
+          service: 'gmail',
+          auth: {
+            user: 'cs361osu@gmail.com',
+            pass: 'superlongstringtest123'
+          }
+        });
+
+        const mailOptions = {
+          from: 'admin@ec3taskmanagement.com',
+          to: user.email,
+          subject: 'Password Reset Requested',
+          text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
+          'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
+          'http://' + req.headers.host + '/reset/' + user.resetPasswordToken + '\n\n' +
+          'If you did not request this, please ignore this email and your password will remain unchanged.\n'
+        };
+
+        transporter.sendMail(mailOptions, function(error, info) {
+          if (error) {
+          console.log(error);
+          } else {
+            console.log('Email sent: ' + info.response);
+          }
+        });
+        res.render('forgot', {
+          info: 'An e-mail has been sent to ' + user.email + ' with further instructions.',
+        });
+      }
+  }
+});
+
+
+app.get('/reset/:token', function(req, res) {
+
+  var sql = "SELECT id, tokenExpiration from users WHERE token = ?";
+  var inserts = [req.params.token];
+        sql = mysql.pool.query(sql, inserts, function(error, result, fields){
+            if(error){
+                res.write(JSON.stringify(error));
+                res.status(400);
+                res.end();
+            }
+            else if (!result[0] || !result[0].id) {
+
+              res.render('reset', {
+                errors: 'Password reset token is invalid.',
+                link: 'http://' + req.headers.host + '/forgot'
+              });
+            }
+            else if (Date.now() > result[0].tokenExpiration) {
+                res.render('reset', {
+                  errors: 'Password reset token is expired.',
+                  link: 'http://' + req.headers.host + '/forgot'
+                });
+            }
+            else {
+              var context = {
+                id: result[0].id,
+                token: Date.now(),
+                showForm: true
+              };
+              res.render('reset', context)
+            }
+        })
+});
+
+app.post('/reset-password', function(req, res, next) {
+
+  var ciphertext = CryptoJS.AES.encrypt(req.body.password, config.cryptoSecret).toString();
+
+  var sql = "UPDATE users SET password = ?, tokenExpiration = ? WHERE id = ?";
+  var inserts = [ciphertext, req.body.token, req.body.id];
+
+        sql = mysql.pool.query(sql, inserts, function(error, result, fields){
+            if(error){
+                res.write(JSON.stringify(error));
+                res.status(400);
+                res.end();
+            }
+
+            res.render('reset', {
+              info: 'Password reset successfully.',
+              link: 'http://' + req.headers.host + '/login'
+            });
+          })
 });
 
 app.post('/add-new-user', function(req, res) {
