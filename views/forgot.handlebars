@@ -1,27 +1,28 @@
 <div id="forgot-page">
 	<div class="form-content">
-		<h1>Enter Email Address</h1>
-         {{#if errors}}
-          <div id='danger'>{{errors}}</div>
-        {{/if}}
-        {{#if info}}
-            <div id='danger'>{{info}}</div>
-        {{else}}
-		<form action="/pass/reset" method="post" id="reset_form">
-			<div class="input-group">
-				<label>Email</label>
-				<input 
-					name="user_email" 
-					id="userEmail" 
-					type="email" 
-					{{#if email}} value={{email}} {{/if}} 
-					required
-				/>
-			</div>
-			<div class="input-group">
-				<input class="button button-block" type="submit" value="Reset Password" />
-			</div>
-		</form>
-        {{/if}}
+    {{#if info}}
+			<h1>Check Your Mailbox</h1>
+      <div id='danger'>{{info}} <a href={{link}}>Back To Login</a></div>
+    {{else}}
+			<h1>Enter Email Address</h1>
+		  {{#if errors}}
+        <div id='danger'>{{errors}}</div>
+      {{/if}}
+			<form action="/pass/reset" method="post" id="reset_form">
+				<div class="input-group">
+					<label>Email</label>
+					<input 
+						name="user_email" 
+						id="userEmail" 
+						type="email" 
+						{{#if email}} value={{email}} {{/if}} 
+						required
+					/>
+				</div>
+				<div class="input-group">
+					<input class="button button-block" type="submit" value="Reset Password" />
+				</div>
+			</form>
+    {{/if}}
 	</div>
 </div>

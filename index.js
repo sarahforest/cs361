@@ -178,6 +178,7 @@ app.post('/pass/reset', function(req, res, next) {
         });
         res.render('forgot', {
           info: 'An e-mail has been sent to ' + user.email + ' with further instructions.',
+          link: 'http://' + req.headers.host + '/login'
         });
       }
   }
