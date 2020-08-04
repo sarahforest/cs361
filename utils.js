@@ -54,7 +54,26 @@ const Utils = {
       SELECT project_id, assignee_id FROM tasks
       UNION
       SELECT project_id, assignee_id FROM subtasks`;
-  }
+  },
+
+  updateStatus(res, referer, request) {
+
+    var sql = "UPDATE " + request['tableName'] +
+              " SET status = ? " +
+              "WHERE id = ?";
+
+    var inserts = [request['status'], request['id']];
+
+    sql = mysql.pool.query(sql, inserts, function(error, results, fields){
+      if(error){
+        res.write(JSON.stringify(error));
+        res.status(400);
+        res.end();
+      } else {
+        res.redirect(referer);
+      }
+    })
+  },
 };
 
 module.exports = Utils;

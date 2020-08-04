@@ -133,21 +133,15 @@ module.exports = function(){
 
 
     router.post('/update-status', function(req,res) {
-        var sql = "UPDATE tasks " + 
-                  "SET status = ? " +
-                  "WHERE id = ?";
+
+        var referrer = req.get('referer');
+
+        var request = [];
+        request['tableName'] = 'tasks';
+        request['id'] = req.body.id;
+        request['status'] = req.body.status;
         
-        var inserts = [req.body.status, req.body.id];
-        // console.log(inserts)
-        sql = mysql.pool.query(sql, inserts, function(error, results, fields){
-            if(error){
-                res.write(JSON.stringify(error));
-                res.status(400);
-                res.end();
-            } else {
-                res.redirect(req.get('referer'));
-            }
-        })
+        Utils.updateStatus(res, referrer, request);
     });
 
     return router;

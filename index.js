@@ -138,55 +138,66 @@ function updateUserTokens(res, user, complete) {
         })
 }
 
+function sendPasswordReset(user, requestUrl, complete) {
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'cs361osu@gmail.com',
+      pass: 'superlongstringtest123'
+    }
+  });
+
+  const mailOptions = {
+    from: 'admin@ec3taskmanagement.com',
+    to: user.email,
+    subject: 'Password Reset Requested',
+    text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
+    'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
+    'http://' + requestUrl + '/reset/' + user.resetPasswordToken + '\n\n' +
+    'If you did not request this, please ignore this email and your password will remain unchanged.\n'
+  };
+
+  transporter.sendMail(mailOptions, function(error, info) {
+    if (error) {
+    console.log(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+      complete();
+    }
+  });
+}
+
+
+// POST request that is called when user submits the password reset form
 app.post('/pass/reset', function(req, res, next) {
   var callbackCount = 0;
   var user = {};
 
-  getToken(res, user, complete);
+  var requestUrl = req.headers.host;
+
+  getToken(res, user, complete); // Create a token that is a random string
+
   function complete(){
       callbackCount++;
       if(callbackCount == 1){
-          checkIfUserExists(req.body.user_email, res, user, complete);
+        checkIfUserExists(req.body.user_email, res, user, complete); // see if user exists before going farther
       } else if (callbackCount == 2) {
-        updateUserTokens(res, user, complete);
+        updateUserTokens(res, user, complete); // update the users table with the token and expiration time
       } else if (callbackCount == 3) {
-
-        const transporter = nodemailer.createTransport({
-          service: 'gmail',
-          auth: {
-            user: 'cs361osu@gmail.com',
-            pass: 'superlongstringtest123'
-          }
-        });
-
-        const mailOptions = {
-          from: 'admin@ec3taskmanagement.com',
-          to: user.email,
-          subject: 'Password Reset Requested',
-          text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
-          'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-          'http://' + req.headers.host + '/reset/' + user.resetPasswordToken + '\n\n' +
-          'If you did not request this, please ignore this email and your password will remain unchanged.\n'
-        };
-
-        transporter.sendMail(mailOptions, function(error, info) {
-          if (error) {
-          console.log(error);
-          } else {
-            console.log('Email sent: ' + info.response);
-          }
-        });
-        res.render('forgot', {
-          info: 'An e-mail has been sent to ' + user.email + ' with further instructions.',
-          link: 'http://' + req.headers.host + '/login'
-        });
+        sendPasswordReset(user, requestUrl, complete); // send the password reset email using nodemailer
+      } else if (callbackCount == 4) {
+        // render the forgot page with a confirmation email for the user
+          res.render('forgot', {
+            info: 'An e-mail has been sent to ' + user.email + ' with further instructions.',
+            link: 'http://' + requestUrl + '/login'
+          });
       }
   }
 });
 
-
+// Reset page rendered with errors or form to create new password
 app.get('/reset/:token', function(req, res) {
-
+  // first check if the token exists in the users table
   var sql = "SELECT id, tokenExpiration from users WHERE token = ?";
   var inserts = [req.params.token];
         sql = mysql.pool.query(sql, inserts, function(error, result, fields){
@@ -195,19 +206,23 @@ app.get('/reset/:token', function(req, res) {
                 res.status(400);
                 res.end();
             }
+            // if reset token doesn't exist, render error on page.
+            // don't give access to the form.
             else if (!result[0] || !result[0].id) {
-
               res.render('reset', {
                 errors: 'Password reset token is invalid.',
                 link: 'http://' + req.headers.host + '/forgot'
               });
             }
+            // check if the token is expired, currently set to 1 hour
             else if (Date.now() > result[0].tokenExpiration) {
                 res.render('reset', {
                   errors: 'Password reset token is expired.',
                   link: 'http://' + req.headers.host + '/forgot'
                 });
             }
+            // otherwise, safe to show the update password form to the user.
+            // valid token was supplied and token not yet expired.
             else {
               var context = {
                 id: result[0].id,
@@ -219,10 +234,13 @@ app.get('/reset/:token', function(req, res) {
         })
 });
 
-app.post('/reset-password', function(req, res, next) {
 
+// POST request that is called when user has changes their password
+app.post('/reset-password', function(req, res, next) {
+  // convert the plaintext password string to encrypted hash password with CryptoJS
   var ciphertext = CryptoJS.AES.encrypt(req.body.password, config.cryptoSecret).toString();
 
+  // update the users table with the new password and force the token to expire so no longer valid URL
   var sql = "UPDATE users SET password = ?, tokenExpiration = ? WHERE id = ?";
   var inserts = [ciphertext, req.body.token, req.body.id];
 
@@ -240,6 +258,7 @@ app.post('/reset-password', function(req, res, next) {
           })
 });
 
+// Creates new user when sign up form is submitted, after validation steps
 app.post('/add-new-user', function(req, res) {
   mysql.pool.query(
     "SELECT id from users where email=" + mysql.pool.escape(req.body.user_email),
@@ -281,11 +300,13 @@ app.post('/add-new-user', function(req, res) {
   );
 });
 
+// Generic 404 handlebars render
 app.use(function(req,res){
   res.status(404);
   res.render('404');
 });
 
+// Generic 500 handlebars render
 app.use(function(err, req, res, next){
   console.error(err.stack);
   res.status(500);
@@ -293,7 +314,6 @@ app.use(function(err, req, res, next){
 });
 
 // Start the server:
-
 app.listen(app.get('port'), function(){
   console.log('Express started on http://localhost:' + app.get('port') + '; press Ctrl-C to terminate.');
 });
