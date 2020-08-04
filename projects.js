@@ -84,8 +84,7 @@ module.exports = function(){
                   "WHERE Project_ID = ?";
         
         var inserts = [req.body.name, req.body.due_date, req.body.status, req.body.user, req.body.id];
-        // console.log(inserts)
-        sql = mysql.pool.query(sql, inserts, function(error, results, fields){
+        sql = mysql.pool.query(sql, inserts, function(error, results, fields) {
             if(error){
                 res.write(JSON.stringify(error));
                 res.status(400);
@@ -96,49 +95,14 @@ module.exports = function(){
         })
     });
 
-    function deleteAssociatedSubTasks(inserts, res) {
-        var sql = "DELETE FROM subtasks WHERE project_id = ?";
-        sql = mysql.pool.query(sql, inserts, function(error, results, fields){
-            if(error){
-                res.write(JSON.stringify(error));
-                res.status(400);
-                res.end();
-            }
-        })
-    }
-
-    function deleteAssociatedTasks(inserts, res) {
-        var sql = "DELETE FROM tasks WHERE project_id = ?";
-        sql = mysql.pool.query(sql, inserts, function(error, results, fields){
-            if(error){
-                res.write(JSON.stringify(error));
-                res.status(400);
-                res.end();
-            }
-        })
-    }
-
-    function deleteProject(inserts, res) {
-        var sql = "DELETE FROM Projects WHERE Project_ID = ?";
-        sql = mysql.pool.query(sql, inserts, function(error, results, fields){
-            if(error){
-                res.write(JSON.stringify(error));
-                res.status(400);
-                res.end();
-            }
-        })
-    }
-
     /* Route to DELETE specified Project */
     router.delete('/:id', requireAuth, function(req, res){
-        console.log(`server: deleting project ${req.params.id}`);
-
         var inserts = req.params.id;
-        deleteAssociatedSubTasks(inserts, res);
-        deleteAssociatedTasks(inserts, res);
-        deleteProject(inserts, res);
+        Utils.deleteData(res, 'subtasks', 'project_id', inserts);
+        Utils.deleteData(res, 'tasks', 'project_id', inserts);
+        Utils.deleteData(res, 'Projects', 'Project_ID', inserts);
+        console.log(`server: project ${req.params.id} deleted.`);
         res.status(202).end();
-
     });
 
     return router;

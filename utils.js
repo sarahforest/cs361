@@ -56,8 +56,8 @@ const Utils = {
       SELECT project_id, assignee_id FROM subtasks`;
   },
 
+  // update status of the given data
   updateStatus(res, referer, request) {
-
     var sql = "UPDATE " + request['tableName'] +
               " SET status = ? " +
               "WHERE id = ?";
@@ -74,6 +74,18 @@ const Utils = {
       }
     })
   },
+
+  // delete data from the given table
+  deleteData(res, tableName, fieldName, inserts) {
+    var sql = `DELETE FROM ${tableName} WHERE ${fieldName} = ?`;
+    mysql.pool.query(sql, inserts, function(error, results) {
+      if(error) {
+        res.write(JSON.stringify(error));
+        res.status(400);
+        res.end();
+      }
+    });
+  }
 };
 
 module.exports = Utils;
