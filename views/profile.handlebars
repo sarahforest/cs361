@@ -1,0 +1,40 @@
+<!-- NAV BAR -->
+{{> navbar_partial}}
+<!-- NAV BAR -->
+
+<div class="profile-page">
+    <div class="user-profile-header">
+        <div class="user-profile-div">
+            <div class="user-profile">
+                {{{trimString name}}}
+            </div>
+        </div>
+        <div class="user-name">
+            Welcome, {{{name}}}
+        </div>
+    </div>
+    <div class="profile">
+        <form action="/profile/edit" method="post">
+        <h4>Profile</h4>
+            <div class="form-row">
+				<div class="form-group col-md-12">
+                    <label>Name</label>
+                    <input class="form-control" name="name" type="text" value={{name}} required />
+                </div>
+            </div>
+             <div class="form-row">
+				<div class="form-group col-md-12">
+                    <label>Email</label>
+                    <input class="form-control"  name="email" type="email" value={{email}} required />
+                </div>
+            </div>
+             <div class="form-row">
+				<div class="form-group col-md-12">
+                    <label>New Password</label>
+                    <input class="form-control" name="password" type="password" />
+                </div>
+             </div>
+             <button type="submit" class="btn btn-primary">Update Profile</button>
+        </form>
+    </div>
+</div>

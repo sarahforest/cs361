@@ -27,6 +27,10 @@ app.set('port', process.argv[2]);
 
 var handlebars = require('express-handlebars').create({
   helpers: {
+    trimString: function(stringName) {
+      var newString = stringName.substring(0,1);
+      return newString.toUpperCase();
+    },
     ifCond: function(v1, operator, v2, options) {
           switch (operator) {
           case '==':
@@ -66,6 +70,8 @@ app.use(express.static(path.join(__dirname, '/public')));
 app.use('/auth', require('./auth-router.js'));
 
 app.use('/projects', require('./projects.js'));
+
+app.use('/profile', require('./profile.js'));
 
 app.use('/project', require('./project.js'));
 

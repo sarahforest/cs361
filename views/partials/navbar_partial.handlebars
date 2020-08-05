@@ -15,12 +15,27 @@
       <li class="nav-item active">
         <a class="nav-link" href='/theirTasks'>Tasks I've Assigned to Others</a>
       </li>
+      <li class="nav-item active hidden">
+        <a class="nav-link" href='/profile'>My Account</a>
+      </li>
+      <li class="nav-item active hidden">
+        <form action="/auth/logout" method="post">
+          <button class="btn btn-danger" type="submit">Log Out</button>
+        </form>  
+      </li>
     </ul>
     {{#if userId}}
-    <span class="danger mr-2"> Hi, {{name}}</span>
-    <form action="/auth/logout" method="post">
-      <button type="submit" class="nav-item btn btn-danger">Log out</button>
-    </form>
+    <div class="dropdown">
+      <div class="user-profile-div">
+        <span class="user-profile">{{{trimString name}}}</span>
+      </div>
+      <div class="dropdown-content">
+        <a href="/profile">Manage Account</a>
+        <form action="/auth/logout" method="post">
+          <button type="submit">Log Out</button>
+        </form>
+      </div>
+    </div>
     {{/if}}
   </div>
 </nav>

@@ -4,6 +4,77 @@ body {
   color: #525151;
 }
 
+/* Header */
+.user-profile {
+  color: white;
+  top: 0.25rem;
+  position: relative;
+}
+
+.user-profile-div {
+  background-color: #FF6A01;
+  border-radius: 100%;
+  width: 2rem;
+  height: 2rem;
+  display: inline-block;
+  text-align: center;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  right: 0;
+}
+
+.nav-item.active.hidden {
+  display: none;
+}
+
+@media (max-width: 991px) {
+  .nav-item.active.hidden {
+    display: block;
+  }
+  .user-profile-div {
+    display: none;
+  }
+}
+
+/* Links inside the dropdown list */
+.dropdown-content a, 
+.dropdown-content button {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content button {
+  border: none;
+  width: 100%;
+}
+
+.dropdown-content a:hover, 
+.dropdown-content button:hover { 
+  background-color: #ddd; 
+  text-decoration: none !important;
+  color: black !important;
+}
+
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+/* End Header */
+
 /* sign up page CSS */
 #danger, .danger {
   color: #FF6A01;
@@ -88,9 +159,11 @@ body {
 #sign-up-page #userPassword {
   margin-bottom: 14px;
 }
+
 #sign-up-page ul {
   list-style-type: none;
 }
+
 #sign-up-page li:before {
   content: "\f00c"; /* FontAwesome Unicode */
   font-family: FontAwesome;
@@ -103,6 +176,7 @@ body {
 #sign-up-page .form-content h1 {
   margin-bottom: 2px;
 }
+
 #sign-up-page .form-content .header {
   font-size: 17px;
   font-weight: 200;
@@ -194,18 +268,21 @@ body {
   color: red;
 }
 
-#reset-page *, #forgot-page * {
+#reset-page *, 
+#forgot-page * {
   box-sizing: border-box;
 }
 
-#reset-page, #forgot-page {
+#reset-page, 
+#forgot-page {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
 }
 
-#reset-page .form-content, #forgot-page .form-content {
+#reset-page .form-content, 
+#forgot-page .form-content {
   width: 50%;
   max-width: 600px;
   background-color: white;
@@ -214,12 +291,14 @@ body {
   padding: 2% 5%;
 }
 
-#reset-page label, #forgot-page label {
+#reset-page label, 
+#forgot-page label {
   margin: 10px 0;
   display: block;
 }
 
-#reset-page input, #forgot-page input {
+#reset-page input, 
+#forgot-page input {
   background: none;
   border: 1px solid #808080;
   border-radius: 0px;
@@ -227,7 +306,8 @@ body {
   padding: 10px;
 }
 
-#reset-page .button.button-block, #forgot-page .button.button-block {
+#reset-page .button.button-block,
+#forgot-page .button.button-block {
   display: block;
   margin-top: 20px;
   background: #fcbd01;
@@ -238,16 +318,19 @@ body {
   letter-spacing: 1px;
 }
 
-#reset-page .button.button-block:hover, #forgot-page .button.button-block:hover {
+#reset-page .button.button-block:hover, 
+#forgot-page .button.button-block:hover {
   background: #fcb101;
   border-color: #fcb101;
 }
 
-#reset_form .input-group:last-of-type, #forgot-page .input-group:last-of-type {
+#reset_form .input-group:last-of-type, 
+#forgot-page .input-group:last-of-type {
   margin-bottom: 30px;
 }
 
-#login-page .login-section a, #forgot-page a, #reset-page a {
+#login-page .login-section a, 
+#forgot-page a, #reset-page a {
   color: #FFB703 !important;
   text-decoration: underline !important;
   cursor: pointer !important;
@@ -322,3 +405,53 @@ body {
   display: inline-block;
   width: auto;
 }
+
+/* Profile Page */
+.profile-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+}
+
+.profile-page .user-profile-header {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.profile-page .user-profile-header .user-profile-div {
+  background-color: #FF6A01;
+  border-radius: 100%;
+  width: 4rem;
+  height: 4rem;
+  display: inline-block;
+  text-align: center;
+}
+
+.profile-page .user-profile-header .user-profile, 
+.profile-page .user-profile-header  .user-name {
+  font-size: 2.5rem;
+}
+
+.profile-page .user-profile-header {
+  margin-bottom: 2rem;
+}
+
+.profile-page .profile  {
+  display: flex;
+  width: 50rem;
+  border-radius: 10px;
+  border: 1px solid #808080;
+}
+
+.profile-page .profile form {
+  flex-direction: column;
+  display: flex;
+  width: 100%;
+  padding: 3rem;
+}
+
+/* End Profile Page */
