@@ -1,15 +1,13 @@
 module.exports = function(){
     var express = require('express');
     var bodyParser = require('body-parser');
-    
     var mysql = require('./dbcon.js');
     var { requireAuth } = require('./middleware.js');
     var Utils = require('./utils');
-    
     var app = express();
-    app.use(bodyParser.urlencoded({extended:true}));
-    
     var router = express.Router();
+    
+    app.use(bodyParser.urlencoded({extended:true}));
 
     /* Add project */
     router.post('/', requireAuth, function(req, res)
@@ -37,9 +35,15 @@ module.exports = function(){
         FROM (${Utils.sqlProjectUsers()}) pu
         INNER JOIN Projects p ON pu.project_id = p.Project_ID
         INNER JOIN users u ON p.Project_Owner = u.id
-        WHERE pu.user_id = ?
+        WHERE pu.user_id = ? 
+        ${(context.Project_Name) ? 'AND Project_Name LIKE ?' : ''}
+        ${(context.Status) ? 'AND Status = ?' : ''}
         ORDER BY Due_Date ASC`;
+
         var inserts = [context.userId];
+        if (context.Project_Name) inserts.push(`%${context.Project_Name}%`);
+        if (context.Status) inserts.push(context.Status);
+
         mysql.pool.query(sql, inserts, function(error, results) {
             if(error){
                 res.write(JSON.stringify(error));
@@ -61,8 +65,12 @@ module.exports = function(){
     router.get('/', requireAuth, function(req, res){
         var callbackCount = 0;
         var context = {};
+        var { Project_Name, Status } = req.query;
         context.userId = req.user.id;
         context.name = req.user.name;
+        if (Project_Name) context.Project_Name = Project_Name;
+        if (Status && Status !== 'All') context.Status = Status;
+        
         getProjects(res, context, complete);
         function complete(){
             callbackCount++;

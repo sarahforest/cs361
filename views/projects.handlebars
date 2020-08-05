@@ -3,61 +3,89 @@
 <!-- NAV BAR -->
 
 <br />
-<!-- ADD A PROJECT -->
+
 <div class="container">
-  <h2>Add a New Project</h2>
-  <form id="add_Project" action="/projects" method="post">
+  <div class="page-header">
+    <h1>My Projects</h1>
+    <button class="btn btn-primary" data-toggle="modal" data-target=".bs-modal-sm2-new">
+      Create Project
+    </button>
+  </div>
 
+  <!-- CREATE PROJECT MODAL -->
+  <div class="modal fade bs-modal-sm2-new">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Create Project</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        </div>
+        <div class="modal-body">
+          <form method="post" action="/projects"> 
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="Project_Name">Project Name</label>
+                <input required type="text" class="form-control" placeholder="Project Name" name="Project_Name" />
+              </div>
+              <div class="form-group col-md-6">
+                <label for="Due_Date">Due Date</label>
+                <br />
+                <input required class="form-control" type="date" placeholder="Due Date" name="Due_Date" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-sm-4">
+                <label for="status">Status</label>
+                <select required class="custom-select mr-sm-2" name="Status">
+                  <option value="To Do">To Do</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="On Hold">On Hold</option>
+                  <option value="Completed">Completed</option>
+                </select>
+              </div>
+              <div class="form-group col-md-8">
+                <label for="user">Project Owner</label>
+                <select class="custom-select mr-sm-2" id="user" name="user" required>
+                  {{#each users}}
+                    <option {{#ifCond this.id '===' ../userId}}selected{{/ifCond}} value={{this.id}}>{{this.name}} - {{this.email}}</option>
+                  {{/each}}
+                </select>
+              </div>
+            </div>
+          </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Create</button>
+          </form>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
+  <hr/>
+  <!-- SEARCH FORM -->
+  <form class="search-form" action="/projects" method="get">
     <div class="form-row">
-      <div class="form-group col-md-6">
-        <label for="Project_Name">Project Name</label>
-        <input required type="text" class="form-control" placeholder="Project Name" name="Project_Name">
-      </div>
-
-
-      <div class="form-group col-md-2">
-        <label for="Due_Date">Due Date</label>
-        <br />
-        <input required class="form-control" type="date" id="due_date" width="144" placeholder="Due Date" name="Due_Date" />
-      </div>
-
-    </div>
-
-
-    <div class="form-row">
-
-      <div class="form-group col-sm-2">
-        <label for="status">Status</label>
-        <select required class="custom-select mr-sm-2" id="status" name="Status">
-          <option selected value="">Status...</option>
-          <option value="To Do">To Do</option>
-          <option value="In Progress">In Progress</option>
-          <option value="On Hold">On Hold</option>
-          <option value="Completed">Completed</option>
+        <label for="Project_Name">Project Name:</label>
+        <input type="text" class="form-control col-md-2 mr-sm-2" name="Project_Name" value={{Project_Name}}>
+        <label for="status">Status:</label>
+        <select class="custom-select col-md-2 mr-sm-4" name="Status">
+          <option value="All">All</option>
+          <option {{#ifCond Status '==' 'To Do'}}selected{{/ifCond}} value="To Do">To Do</option>
+          <option {{#ifCond Status '==' 'In Progress'}}selected{{/ifCond}} value="In Progress">In Progress</option>
+          <option {{#ifCond Status '==' 'On Hold'}}selected{{/ifCond}} value="On Hold">On Hold</option>
+          <option {{#ifCond Status '==' 'Completed'}}selected{{/ifCond}} value="Completed">Completed</option>
         </select>
-      </div>
-
-      <div class="form-group col-md-6">
-        <label for="user">Project Owner</label>
-        <!-- Can be re-used for tasks / subtasks forms -->
-        <select class="custom-select mr-sm-2" id="user" name="user" required>
-          <option selected value="">Project Owner...</option>
-          {{#each users}}
-          <option value={{this.id}}>{{this.name}} - {{this.email}}</option>
-          {{/each}}
-        </select>
-      </div>
+      <button type="submit" value="Submit" class="btn btn-primary">Search</button>
     </div>
-
-    <button type="submit" value="Submit" class="btn btn-primary">Submit</button>
   </form>
 </div>
 
-
+<br/>
 <!-- DISPLAY PROJECTS -->
 <p></p>
 <div class="container">
-  <h2>Your Current Projects</h2>
+  <h2>Current Projects</h2>
   <p></p>
   <table class="table table-striped">
 
@@ -98,7 +126,7 @@
           <div class="modal fade bs-modal-sm2-{{Project_ID}}">
             <div class="modal-dialog">
               <div class="modal-content">
-               <div class="modal-header">
+                <div class="modal-header">
                   <h4 class="modal-title">Edit Project {{Project_Name}}</h4>
                   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
@@ -136,7 +164,7 @@
                       <input name="userId" type="hidden" value="{{../userId}}" />
                       <input name="id" type="hidden" value="{{Project_ID}}" />
                     </div>
-                   </div>
+                  </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                   <button type="submit" class="btn btn-primary">Save changes</button>
@@ -155,7 +183,7 @@
 
 
 <div class="container">
-  <h2>Your Past Projects</h2>
+  <h2>Past Projects</h2>
   <p></p>
   <table class="table table-striped">
 

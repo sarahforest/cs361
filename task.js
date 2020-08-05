@@ -8,9 +8,9 @@ module.exports = function(){
     /* Add Subtask */
     router.post('/', requireAuth, function(req, res) {
         var sql = "INSERT IGNORE INTO subtasks (project_id, task_id, name, assignee_id, due_date, status, description) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        
         var inserts = [req.body.project_id, req.body.task_id, req.body.name, req.body.user, req.body.due_date, req.body.status, req.body.description];
         
-        //console.log(inserts);
         sql = mysql.pool.query(sql,inserts,function(error, results, fields){
             if(error){
                 console.log(JSON.stringify(error))
@@ -24,7 +24,6 @@ module.exports = function(){
     });
 
     /* Get all subtasks of the current project */
-    
     function getCurrentSubTasks(res, context, complete) {
         var sql = `SELECT 
             st.*,
@@ -37,8 +36,19 @@ module.exports = function(){
         INNER JOIN subtasks st ON pu.project_id = st.project_id
         INNER JOIN users u ON st.assignee_id = u.id
         WHERE pu.user_id = ? AND st.task_id = ? 
+        ${(context.search_text) ? 'AND (st.name LIKE ? OR st.description LIKE ?)' : ''}
+        ${(context.status) ? 'AND st.status = ?' : ''}
+        ${(context.assignee) ? 'AND st.assignee_id = ?' : ''}
         ORDER BY due_date ASC`;
+
         var inserts = [context.userId, context.task_id];
+        if (context.search_text) {
+            inserts.push(`%${context.search_text}%`);
+            inserts.push(`%${context.search_text}%`);
+        }
+        if (context.status) inserts.push(context.status);
+        if (context.assignee) inserts.push(context.assignee);
+
         mysql.pool.query(sql, inserts, function(error, results) {
             if(error){
                 res.write(JSON.stringify(error));
@@ -79,9 +89,14 @@ module.exports = function(){
     router.get('/:tid', requireAuth, function(req, res){
         var callbackCount = 0;
         var context = {};
+        var { search_text, status, assignee } = req.query;
         context.userId = req.user.id;
         context.name = req.user.name;
         context.task_id = req.params.tid;
+        if (search_text) context.search_text = search_text;
+        if (status && status !== 'All') context.status = status;
+        if (assignee && assignee !== 'All') context.assignee = assignee;
+
         getCurrentSubTasks(res, context, complete)
         function complete(){
             callbackCount++;
@@ -92,6 +107,7 @@ module.exports = function(){
             } else if (callbackCount == 3) {
                 Utils.getUsers(res, context, complete);
             } else if (callbackCount >= 4) { 
+                console.log(context);
                 res.render('task', context);
             }
         }
@@ -109,7 +125,7 @@ module.exports = function(){
                   "WHERE id = ?";
         
         var inserts = [req.body.name, req.body.due_date, req.body.status, req.body.user, req.body.description, req.body.id];
-        // console.log(inserts)
+
         sql = mysql.pool.query(sql, inserts, function(error, results, fields){
             if(error){
                 res.write(JSON.stringify(error));

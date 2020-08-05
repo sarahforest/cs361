@@ -1,16 +1,14 @@
 module.exports = function(){
     var express = require('express');
-    
     var mysql = require('./dbcon.js');
     var { requireAuth } = require('./middleware.js');
     var Utils = require('./utils');
-    
     var router = express.Router();
 
     /* Add Task */
     router.post('/', requireAuth, function(req, res) {
         var sql = "INSERT IGNORE INTO tasks (project_id, name, assignee_id, due_date, status, description) VALUES (?, ?, ?, ?, ?, ?)";
-   
+
         var inserts = [req.body.project_id, req.body.name, req.body.user, req.body.due_date, req.body.status, req.body.description];
 
         sql = mysql.pool.query(sql, inserts, function(error, results, fields) {
@@ -38,8 +36,19 @@ module.exports = function(){
         INNER JOIN tasks t ON pu.project_id = t.project_id
         INNER JOIN users u ON t.assignee_id = u.id
         WHERE pu.user_id = ? AND t.project_id = ?
+        ${(context.search_text) ? 'AND (t.name LIKE ? OR t.description LIKE ?)' : ''}
+        ${(context.status) ? 'AND t.status = ?' : ''}
+        ${(context.assignee) ? 'AND t.assignee_id = ?' : ''}
         ORDER BY due_date ASC`;
+
         var inserts = [context.userId, context.project_id];
+        if (context.search_text) {
+            inserts.push(`%${context.search_text}%`);
+            inserts.push(`%${context.search_text}%`);
+        }
+        if (context.status) inserts.push(context.status);
+        if (context.assignee) inserts.push(context.assignee);
+
         mysql.pool.query(sql, inserts, function(error, results) {
             if(error){
                 res.write(JSON.stringify(error));
@@ -60,9 +69,14 @@ module.exports = function(){
     router.get('/:pid', requireAuth, function(req, res){
         var callbackCount = 0;
         var context = {};
+        var { search_text, status, assignee } = req.query;
         context.userId = req.user.id;
         context.name = req.user.name;
         context.project_id = req.params.pid;
+        if (search_text) context.search_text = search_text;
+        if (status && status !== 'All') context.status = status;
+        if (assignee && assignee !== 'All') context.assignee = assignee;
+
         getCurrentTasks(res, context, complete);
         function complete(){
             callbackCount++;
@@ -86,7 +100,7 @@ module.exports = function(){
                   "WHERE id = ?";
         
         var inserts = [req.body.name, req.body.due_date, req.body.status, req.body.user, req.body.description, req.body.id];
-        // console.log(inserts)
+
         sql = mysql.pool.query(sql, inserts, function(error, results, fields){
             if(error){
                 res.write(JSON.stringify(error));

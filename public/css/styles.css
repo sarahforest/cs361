@@ -172,6 +172,14 @@ body {
   letter-spacing: 1px;
 }
 
+#login-page .login-section {
+  color: #FFB703;
+}
+
+.go-back-link {
+  margin-bottom: 0px;
+}
+
 #login-page .button.button-block:hover {
   background: #fcb101;
   border-color: #fcb101;
@@ -239,6 +247,12 @@ body {
   margin-bottom: 30px;
 }
 
+#login-page .login-section a, #forgot-page a, #reset-page a {
+  color: #FFB703 !important;
+  text-decoration: underline !important;
+  cursor: pointer !important;
+}
+
 /* buttons */
 
 .btn.btn-primary {
@@ -284,13 +298,27 @@ body {
   border-top: 4px solid #fcbd01;
 }
 
-#login-page .login-section {
-  color: #FFB703;
+/* page header */
+.page-header {
+  display: flex;
+  justify-content: start;
+  align-items: center;
 }
 
-#login-page .login-section a, #forgot-page a, #reset-page a {
-  color: #FFB703 !important;
-  text-decoration: underline !important;
-  cursor: pointer !important;
+.page-header button {
+  margin-left: 15px;
 }
 
+/* search form */
+.search-form .form-row {
+  align-items: center;
+}
+
+.search-form label {
+  margin: 10px;
+}
+
+.search-form input, .search-form select {
+  display: inline-block;
+  width: auto;
+}
