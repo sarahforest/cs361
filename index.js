@@ -81,7 +81,7 @@ app.get('/', function(req, res, next) {
 });
 
 app.get('/login', function(req, res, next) {
-  const context = { email: '', password: '' };
+  const context = { email: '', password: '', fromUrl: req.query.fromUrl };
   res.render('login', context);
 });
 

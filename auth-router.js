@@ -1,17 +1,15 @@
 const express = require('express');
-
 const mysql = require('./dbcon.js');
 const AuthService = require('./auth-service.js');
-
 const AuthRouter = express.Router();
 const jsonBodyParser = express.json();
 
 AuthRouter
   .post('/login', jsonBodyParser, function(req, res) {
-    const { user_email, user_password } = req.body;
-
+    const { user_email, user_password, fromUrl } = req.body;
     const sql = "SELECT * FROM users WHERE email = ?";
     const values = user_email;
+
     mysql.pool.query(sql, values, (error, result) => {
       // stores user inputs for re-rendering values if login fails
       const context = {
@@ -43,7 +41,8 @@ AuthRouter
         const payload = { userId: result[0].id };
         // store auth token in session
         req.session.authToken = AuthService.createJwt(payload);
-        res.redirect('/projects');
+        if (fromUrl && fromUrl !== '/') res.redirect(fromUrl);
+        else res.redirect('/projects');
       }
     });
   })

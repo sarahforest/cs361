@@ -3,7 +3,9 @@ const AuthService = require('./auth-service.js');
 
 // if there's valid auth token in session, store user in req
 function requireAuth(req, res, next) {
-  if (!req.session.authToken) { return res.redirect('/'); }
+  if (!req.session.authToken) {
+    return res.redirect(`/login?fromUrl=${req.originalUrl}`);
+  }
   try {
     const payload = AuthService.verifyJwt(req.session.authToken);
     // get user data with id
@@ -18,7 +20,9 @@ function requireAuth(req, res, next) {
       }
 
       // id doesn't exist
-      else if (!result[0]) { res.redirect('/'); }
+      else if (!result[0]) {
+        return res.redirect(`/login?fromUrl=${req.originalUrl}`);
+      }
 
       // user id exists, store user in req
       else {
@@ -27,7 +31,9 @@ function requireAuth(req, res, next) {
       }
     });
   }
-  catch(error) { res.redirect('/'); }
+  catch(error) {
+    return res.redirect(`/login?fromUrl=${req.originalUrl}`);
+  }
 }
 
 module.exports = { requireAuth };
