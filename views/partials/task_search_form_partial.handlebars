@@ -1,9 +1,16 @@
 <!-- SEARCH FORM -->
-{{#if task_id}}
+{{#ifCond page '==' 'task'}}
 	<form class="search-form" action="/task/{{task_id}}" method="get">
-{{else}}
+{{/ifCond}}
+{{#ifCond page '==' 'project'}}
 	<form class="search-form" action="/project/{{project_id}}" method="get">
-{{/if}}
+{{/ifCond}}
+{{#ifCond page '==' 'mytasks'}}
+	<form class="search-form" action="/mytasks/" method="get">
+{{/ifCond}}
+{{#ifCond page '==' 'theirtasks'}}
+	<form class="search-form" action="/theirtasks/" method="get">
+{{/ifCond}}
 	<div class="form-row">
 		<label for="search_text">Text:</label>
 		<input type="text" class="form-control col-md-2 mr-sm-2" name="search_text" value={{search_text}}>
@@ -15,13 +22,15 @@
 			<option {{#ifCond status '==' 'On Hold'}}selected{{/ifCond}} value="On Hold">On Hold</option>
 			<option {{#ifCond status '==' 'Completed'}}selected{{/ifCond}} value="Completed">Completed</option>
 		</select>
-		<label for="user">Assignee</label>
-		<select class="custom-select col-md-2 mr-sm-4" id="user" name="assignee">
-			<option value="All">All</option>
-			{{#each users}}
-				<option {{#ifCond this.id '===' ../assignee}}selected{{/ifCond}} value={{this.id}}>{{this.name}}</option>
-			{{/each}}
-		</select>
+		{{#if project_id}}
+			<label for="user">Assignee</label>
+			<select class="custom-select col-md-2 mr-sm-2" id="user" name="assignee">
+				<option value="All">All</option>
+				{{#each users}}
+					<option {{#ifCond this.id '===' ../assignee}}selected{{/ifCond}} value={{this.id}}>{{this.name}}</option>
+				{{/each}}
+			</select>
+		{{/if}}
 		<button type="submit" value="Submit" class="btn btn-primary">Search</button>
 	</div>
 </form>

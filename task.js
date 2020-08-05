@@ -107,7 +107,7 @@ module.exports = function(){
             } else if (callbackCount == 3) {
                 Utils.getUsers(res, context, complete);
             } else if (callbackCount >= 4) { 
-                console.log(context);
+                context.page = 'task';
                 res.render('task', context);
             }
         }

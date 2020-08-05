@@ -85,6 +85,7 @@ module.exports = function(){
             } else if (callbackCount == 2) {
                 Utils.getUsers(res, context, complete);
             } else if (callbackCount >= 3) {
+                context.page = 'project';
                 res.render('project', context);
             }
         }

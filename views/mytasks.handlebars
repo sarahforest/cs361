@@ -3,10 +3,18 @@
 <!-- NAV BAR -->
 
 <br />
+<div class="container">
+  <div class="page-header">
+    <h1>My Tasks</h1>
+  </div>
+  <hr/>
+  {{> task_search_form_partial}}
+</div>
+
 <!-- DISPLAY MY CURRENT TASKS/SUBTASKS -->
 <p></p>
 <div class="container">
-  <h2>My Current Tasks</h2>
+  <h2>Current Tasks</h2>
   <p></p>
   <table class="table table-striped">
 
@@ -90,7 +98,7 @@
 
 <!-- DISPLAY MY PAST TASKS/SUBTASKS -->
 <div class="container">
-  <h2>My Past Tasks</h2>
+  <h2>Past Tasks</h2>
   <p></p>
   <table class="table table-striped">
 

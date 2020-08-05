@@ -6,12 +6,16 @@ const router = express.Router();
 
 router
   .get('/', requireAuth, function(req, res) {
-    let callbackCount = 0;
     const context = {};
+    const { search_text, status } = req.query;
     context.userId = req.user.id;
     context.name = req.user.name;
+    if (search_text) context.search_text = search_text;
+    if (status && status !== 'All') context.status = status;
+    
     getMyTasks(res, context, complete);
     function complete() {
+        context.page = 'mytasks';
         res.render('mytasks', context);
     }
   });
@@ -41,8 +45,18 @@ router
         ) t
         INNER JOIN Projects p ON t.project_id = p.Project_ID
         INNER JOIN users u ON t.assignee_id = u.id 
+        WHERE 1
+        ${(context.search_text) ? 'AND (t.name LIKE ? OR t.description LIKE ?)' : ''}
+        ${(context.status) ? 'AND t.status = ?' : ''}
         ORDER BY t.due_date ASC`;
+
     const inserts = [context.userId, context.userId];
+    if (context.search_text) {
+        inserts.push(`%${context.search_text}%`);
+        inserts.push(`%${context.search_text}%`);
+    }
+    if (context.status) inserts.push(context.status);
+
     mysql.pool.query(sql, inserts, function(error, results) {
         if(error){
             res.write(JSON.stringify(error));
