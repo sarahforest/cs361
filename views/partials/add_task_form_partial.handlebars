@@ -3,28 +3,15 @@
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				{{#if task_id}}
-					<h4 class="modal-title">Add Subtask</h4>
-				{{else}}
-					<h4 class="modal-title">Add Task</h4>
-				{{/if}}
+				<h4 class="modal-title">Add {{items_title}}</h4>
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 			</div>
 			<div class="modal-body">
-				{{#if task_id}}
-					<form method="post" action="/task">
-				{{else}}
-					<form method="post" action="/project">
-				{{/if}}
+				<form method="post" action="/{{page}}">
 					<div class="form-row">
 						<div class="form-group col-md-6">
-							{{#if task_id}}
-								<label for="subtask_name">Subtask Name</label>
-								<input required type="text" class="form-control" placeholder="Subtask Name" name="name" />
-							{{else}}
-								<label for="task_name">Task Name</label>
-								<input required type="text" class="form-control" placeholder="Task Name" name="name" />
-							{{/if}}
+							<label for="subtask_name">{{items_title}} Name</label>
+							<input required type="text" class="form-control" placeholder="{{items_title}} Name" name="name" />
 						</div>
 						<div class="form-group col-md-6">
 							<label for="due_date">Due Date</label>
