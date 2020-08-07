@@ -52,8 +52,8 @@
                       <div class="form-group col-md-8">
                         <label for="user">Project Owner</label>
                         <select class="custom-select mr-sm-2" id="user" name="user" required>
-                          {{#each ../users}}
-                          <option {{#ifCond this.id '===' ../../userId}}selected{{/ifCond}} value={{this.id}}>{{this.name}} - {{this.email}}</option>
+                          {{#each users}}
+                          <option {{#ifCond this.id '===' ../userId}}selected{{/ifCond}} value={{this.id}}>{{this.name}} - {{this.email}}</option>
                           {{/each}}
                         </select>
                       </div>
