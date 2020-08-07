@@ -9,24 +9,23 @@ module.exports = function(){
     
     app.use(bodyParser.urlencoded({extended:true}));
 
-    /* Add project */
-    router.post('/', requireAuth, function(req, res)
+    // Add project.
+    router.post('/', requireAuth, function(req, res) // requireAuth is middleware that will run before our own callback.
     {
-        var sql = "INSERT IGNORE INTO Projects (Project_Name, Status, Project_Owner, Due_Date) VALUES (?,?, ?,?)";
+        var sql = `INSERT IGNORE INTO Projects (Project_Name, Status, Project_Owner, Due_Date) VALUES (?, ?, ?, ?)`;
         var inserts = [req.body.Project_Name, req.body.Status, req.body.user, req.body.Due_Date];
-        sql = mysql.pool.query(sql,inserts,function(error, results, fields){
-            if(error){
+        sql = mysql.pool.query(sql, inserts, function(error, results, fields){
+            if (error) {
                 console.log(JSON.stringify(error))
                 res.write(JSON.stringify(error));
                 res.end();
-            }else{
+            } else {
                 res.redirect('/projects');
             }
         });
     });
 
-    /* Get all projects */
-    function getProjects(res, context, complete){
+    function getProjects(res, context, complete) {
         var sql = `SELECT 
             p.*,
             u.name,
@@ -45,7 +44,7 @@ module.exports = function(){
         if (context.Status) inserts.push(context.Status);
 
         mysql.pool.query(sql, inserts, function(error, results) {
-            if(error){
+            if (error) {
                 res.write(JSON.stringify(error));
                 res.end();
             }
@@ -61,8 +60,8 @@ module.exports = function(){
         });
     }
 
-    /* Display all projects */
-    router.get('/', requireAuth, function(req, res){
+    // Display all projects
+    router.get('/', requireAuth, function(req, res) {
         var callbackCount = 0;
         var context = {};
         var { Project_Name, Status } = req.query;
@@ -70,11 +69,11 @@ module.exports = function(){
         context.name = req.user.name;
         if (Project_Name) context.Project_Name = Project_Name;
         if (Status && Status !== 'All') context.Status = Status;
-        
+
         getProjects(res, context, complete);
-        function complete(){
+        function complete() {
             callbackCount++;
-            if(callbackCount == 1){
+            if (callbackCount == 1) {
                 Utils.getUsers(res, context, complete);
             } else if (callbackCount >= 2) {
                 res.render('projects', context);
@@ -82,18 +81,16 @@ module.exports = function(){
         };
     });
 
-    /* Update project */
-    router.post('/update', function(req,res) {
-        var sql = "UPDATE Projects " + 
-                  "SET Project_Name = ?, " + 
-                  "Due_Date = ?, " +
-                  "Status = ?, " +
-                  "Project_Owner = ? " + 
-                  "WHERE Project_ID = ?";
-        
+    router.post('/update', requireAuth, function(req,res) {
+        var sql = `UPDATE Projects 
+                   SET Project_Name = ?, 
+                   Due_Date = ?,
+                   Status = ?,
+                   Project_Owner = ? 
+                   WHERE Project_ID = ?`;
         var inserts = [req.body.name, req.body.due_date, req.body.status, req.body.user, req.body.id];
         sql = mysql.pool.query(sql, inserts, function(error, results, fields) {
-            if(error){
+            if (error) {
                 res.write(JSON.stringify(error));
                 res.status(400);
                 res.end();
@@ -103,7 +100,6 @@ module.exports = function(){
         })
     });
 
-    /* Route to DELETE specified Project */
     router.delete('/:id', requireAuth, function(req, res){
         var inserts = req.params.id;
         Utils.deleteData(res, 'subtasks', 'project_id', inserts);

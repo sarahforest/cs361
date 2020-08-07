@@ -32,7 +32,7 @@ var handlebars = require('express-handlebars').create({
       return newString.toUpperCase();
     },
     ifCond: function(v1, operator, v2, options) {
-          switch (operator) {
+      switch (operator) {
           case '==':
               return (v1 == v2) ? options.fn(this) : options.inverse(this);
           case '===':
@@ -134,14 +134,14 @@ function checkIfUserExists(email, res, user, complete) {
 function updateUserTokens(res, user, complete) {
   var sql = "UPDATE users SET token = ?, tokenExpiration = ? WHERE id = ?";
   var inserts = [user.resetPasswordToken, user.resetPasswordExpires, user.id];
-        sql = mysql.pool.query(sql, inserts, function(error, results, fields){
-            if(error){
-                res.write(JSON.stringify(error));
-                res.status(400);
-                res.end();
-            }
-            complete();
-        })
+  sql = mysql.pool.query(sql, inserts, function(error, results, fields){
+      if(error){
+          res.write(JSON.stringify(error));
+          res.status(400);
+          res.end();
+      }
+      complete();
+  })
 }
 
 function sendPasswordReset(user, requestUrl, complete) {
@@ -206,38 +206,38 @@ app.get('/reset/:token', function(req, res) {
   // first check if the token exists in the users table
   var sql = "SELECT id, tokenExpiration from users WHERE token = ?";
   var inserts = [req.params.token];
-        sql = mysql.pool.query(sql, inserts, function(error, result, fields){
-            if(error){
-                res.write(JSON.stringify(error));
-                res.status(400);
-                res.end();
-            }
-            // if reset token doesn't exist, render error on page.
-            // don't give access to the form.
-            else if (!result[0] || !result[0].id) {
-              res.render('reset', {
-                errors: 'Password reset token is invalid.',
-                link: 'http://' + req.headers.host + '/forgot'
-              });
-            }
-            // check if the token is expired, currently set to 1 hour
-            else if (Date.now() > result[0].tokenExpiration) {
-                res.render('reset', {
-                  errors: 'Password reset token is expired.',
-                  link: 'http://' + req.headers.host + '/forgot'
-                });
-            }
-            // otherwise, safe to show the update password form to the user.
-            // valid token was supplied and token not yet expired.
-            else {
-              var context = {
-                id: result[0].id,
-                token: Date.now(),
-                showForm: true
-              };
-              res.render('reset', context)
-            }
-        })
+  sql = mysql.pool.query(sql, inserts, function(error, result, fields){
+      if(error){
+          res.write(JSON.stringify(error));
+          res.status(400);
+          res.end();
+      }
+      // if reset token doesn't exist, render error on page.
+      // don't give access to the form.
+      else if (!result[0] || !result[0].id) {
+        res.render('reset', {
+          errors: 'Password reset token is invalid.',
+          link: 'http://' + req.headers.host + '/forgot'
+        });
+      }
+      // check if the token is expired, currently set to 1 hour
+      else if (Date.now() > result[0].tokenExpiration) {
+          res.render('reset', {
+            errors: 'Password reset token is expired.',
+            link: 'http://' + req.headers.host + '/forgot'
+          });
+      }
+      // otherwise, safe to show the update password form to the user.
+      // valid token was supplied and token not yet expired.
+      else {
+        var context = {
+          id: result[0].id,
+          token: Date.now(),
+          showForm: true
+        };
+        res.render('reset', context)
+      }
+  })
 });
 
 
@@ -250,18 +250,18 @@ app.post('/reset-password', function(req, res, next) {
   var sql = "UPDATE users SET password = ?, tokenExpiration = ? WHERE id = ?";
   var inserts = [ciphertext, req.body.token, req.body.id];
 
-        sql = mysql.pool.query(sql, inserts, function(error, result, fields){
-            if(error){
-                res.write(JSON.stringify(error));
-                res.status(400);
-                res.end();
-            }
+  sql = mysql.pool.query(sql, inserts, function(error, result, fields){
+      if(error){
+          res.write(JSON.stringify(error));
+          res.status(400);
+          res.end();
+      }
 
-            res.render('reset', {
-              info: 'Password reset successfully.',
-              link: 'http://' + req.headers.host + '/login'
-            });
-          })
+      res.render('reset', {
+        info: 'Password reset successfully.',
+        link: 'http://' + req.headers.host + '/login'
+      });
+    })
 });
 
 // Creates new user when sign up form is submitted, after validation steps

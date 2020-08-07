@@ -59,7 +59,7 @@ module.exports = function(){
                     st.isOverdue = Utils.isOverdue(st.due_date);
                     [st.due_date, st.format_date] = Utils.formatDueDate(st.due_date);
                 })
-                context.subtasks = results;
+                context.tasks = results;
                 complete();
             }
         });
@@ -97,7 +97,7 @@ module.exports = function(){
         if (status && status !== 'All') context.status = status;
         if (assignee && assignee !== 'All') context.assignee = assignee;
 
-        getCurrentSubTasks(res, context, complete)
+        getCurrentSubTasks(res, context, complete);
         function complete(){
             callbackCount++;
             if (callbackCount == 1){
@@ -108,6 +108,7 @@ module.exports = function(){
                 Utils.getUsers(res, context, complete);
             } else if (callbackCount >= 4) { 
                 context.page = 'task';
+                context.items_title = 'Subtask';
                 res.render('task', context);
             }
         }
