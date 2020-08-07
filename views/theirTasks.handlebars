@@ -14,12 +14,13 @@
 <!-- DISPLAY THEIR CURRENT TASKS/SUBTASKS -->
 <p></p>
 <div class="container">
-  <h2>Current Tasks</h2>
+  <h2>Current Tasks 7</h2>
   <p></p>
   <table class="table table-striped">
 
     <thead class="thead-dark">
-      <tr>
+      {{> tasks_table_head_partial}}
+      {{!-- <tr>
 				<th scope="col">Project</th>
         <th scope="col">Task</th>
         <th scope="col">Description</th>
@@ -27,12 +28,13 @@
         <th scope="col">Status</th>
         <th scope="col">Assignee</th>
         <th scope="col">Manage</th>
-      </tr>
+      </tr> --}}
     </thead>
 
     <tbody>
       {{#each currenttasks}}
-      <tr>
+      {{> tasks_table_body_partial}}
+      {{!-- <tr>
         <th scope="row">{{Project_Name}}</th>
         <td>{{name}}</td>
         <td>{{description}}</td>
@@ -88,7 +90,7 @@
             </div><!-- /.modal-dialog -->
           </div><!-- /.modal -->
         </td>
-      </tr>
+      </tr> --}}
       {{/each}}
     </tbody>
 
@@ -98,12 +100,13 @@
 
 <!-- PAST TASKS I'VE ASSIGNED TO OTHERS -->
 <div class="container">
-  <h2>Past Tasks</h2>
+  <h2>Past Tasks 8</h2>
   <p></p>
   <table class="table table-striped">
 
     <thead class="thead-dark">
-      <tr>
+      {{> tasks_table_head_partial}}
+      {{!-- <tr>
 				<th scope="col">Project</th>
         <th scope="col">Task</th>
         <th scope="col">Description</th>
@@ -111,12 +114,13 @@
         <th scope="col">Status</th>
         <th scope="col">Assignee</th>
         <th scope="col">Manage</th>
-      </tr>
+      </tr> --}}
     </thead>
 
     <tbody>
       {{#each pasttasks}}
-      <tr>
+      {{> tasks_table_body_partial}}
+      {{!-- <tr>
         <th scope="row">{{Project_Name}}</th>
         <td>{{name}}</td>
         <td>{{description}}</td>
@@ -172,7 +176,7 @@
             </div><!-- /.modal-dialog -->
           </div><!-- /.modal -->
         </td>
-      </tr>
+      </tr> --}}
       {{/each}}
     </tbody>
 
