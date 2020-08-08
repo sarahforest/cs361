@@ -89,12 +89,12 @@
 
   <table class="table table-striped">
     <!-- PROJECTS_TABLE_HEAD partial -->
-    {{> projects_table_head}}
+    {{> projects_table_head_partial}}
 
     <tbody>
       {{#each currentprojects}}
       <!-- PROJECTS_TABLE_BODY partial -->
-      {{> projects_table_body userId=../userId users=../users}} 
+      {{> projects_table_body_partial userId=../userId users=../users}} 
       {{/each}}
     </tbody>
 
@@ -110,12 +110,12 @@
   <table class="table table-striped">
 
     <!-- PROJECTS_TABLE_HEAD partial -->
-    {{> projects_table_head}}
+    {{> projects_table_head_partial}}
 
     <tbody>
       {{#each pastprojects}}
       {{!-- projects_table_body partial --}}
-      {{> projects_table_body userId=../userId users=../users}} 
+      {{> projects_table_body_partial userId=../userId users=../users}} 
       {{/each}}
     </tbody>
 
