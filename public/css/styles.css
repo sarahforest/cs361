@@ -4,6 +4,41 @@ body {
   color: #525151;
 }
 
+.container-cus {
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+@media (min-width: 768px) {
+  .container-cus {
+    width: 90%;
+    min-width: 768px;
+  }
+}
+
+@media (min-width: 992px) {
+  .container-cus {
+    width: 80%;
+    min-width: 892px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container-cus {
+    max-width: 1140px;
+  }
+}
+
+/*
+@media (min-width: 576px) {
+  .container-cus {
+    max-width: 540px;
+  }
+}*/
+
 /* Header */
 .user-profile {
   color: white;
@@ -96,7 +131,7 @@ body {
   background: none;
   border: 1px solid #808080;
   border-radius: 0px;
-  width: 96%;
+  width: 100%;
   padding: 10px;
 }
 
@@ -104,15 +139,19 @@ body {
   margin-bottom: 8px;
 }
 
+#sign_up_form {
+  margin: 2% 5%;
+}
+
 #sign_up_form .input-group:last-of-type {
   margin-bottom: 30px;
 }
 
 #sign-up-page .button.button-block {
-  width: 104%;
   background: #fcbd01;
   border-color: #fcbd01;
   color: #fff;
+  margin-top: 10px;
   padding-top: 10px;
   padding-bottom: 10px;
   font-weight: 900;
@@ -120,8 +159,6 @@ body {
 }
 
 #sign-up-page .login-section {
-  margin: 3% -6.5% -2.5% -6.5%;
-  border-radius: 2px;
   background-color: #fcbd01;
   padding: 2%;
 }
@@ -145,15 +182,13 @@ body {
 
 
 #sign-up-page .float-left {
-  width: 46%;
-  float: left;
-  padding: 2%;
+  width: 48%;
+  padding-top: 2%;
 }
 
 #sign-up-page .float-right {
-  width: 46%;
-  float: left;
-  padding: 2%;
+  width: 48%;
+  padding-top: 2%;
 }
 
 #sign-up-page #userPassword {
@@ -174,13 +209,13 @@ body {
   }
 
 #sign-up-page .form-content h1 {
-  margin-bottom: 2px;
+  margin: 2% 5%;
 }
 
 #sign-up-page .form-content .header {
   font-size: 17px;
   font-weight: 200;
-  margin: 0;
+  margin: 2% 5%;
 }
 
 #sign-up-page a {
@@ -190,11 +225,10 @@ body {
 
 #sign-up-page .form-content {
   background-color: white;
-  width: 75%;
   border-radius: 3px;
   border: 1px solid #808080;
-  padding: 2% 5%;
-  min-width: 520px
+  max-width: 540px;
+  min-width: 360px;
 }
 
 /* login page CSS */
@@ -219,7 +253,7 @@ body {
   background-color: white;
   border-radius: 3px;
   border: 1px solid #808080;
-  padding: 2% 5%;
+  padding: 2%;
 }
 
 #login-page label {
