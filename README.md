@@ -68,4 +68,4 @@ Running the documentation generator on the command line
 
 This command will create a directory named out/ in the current working directory. Within that directory, you will find the generated HTML pages (e.g. yourFile.html).
 
-![JSDOC Documentation](https://jsdoc.app/)
+[JSDOC Documentation](https://jsdoc.app/)
