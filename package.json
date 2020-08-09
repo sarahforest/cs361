@@ -9,6 +9,9 @@
     "dev": "nodemon index.js",
     "dev-forever": "./node_modules/forever/bin/forever index.js"
   },
+  "engines": {
+    "node": "12.14.0"
+  },
   "repository": {
     "type": "git",
     "url": "git@github.com:sarahforest/cs361.git"
