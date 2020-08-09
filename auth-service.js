@@ -1,23 +1,22 @@
 const crypto = require("crypto-js");
 const jwt = require('jsonwebtoken');
-
-const config = require('./config.js');
+const { JWT_SECRET, CRYPTO_SECRET } = require('./config.js');
 
 const AuthService = {
   comparePasswords(password, hash) {
-    const bytes = crypto.AES.decrypt(hash, config.cryptoSecret);
+    const bytes = crypto.AES.decrypt(hash, CRYPTO_SECRET);
     const decrypted = bytes.toString(crypto.enc.Utf8);
     return password === decrypted;
   },
   
   createJwt(payload) {
-    return jwt.sign(payload, config.JWT_SECRET, {
+    return jwt.sign(payload, JWT_SECRET, {
       algorithm: 'HS256'
     });
   },
 
   verifyJwt(token) {
-    return jwt.verify(token, config.JWT_SECRET);
+    return jwt.verify(token, JWT_SECRET);
   }  
 };
 

@@ -1,5 +1,5 @@
 // Require necessary packages/files:
-
+require('dotenv').config();
 var express = require('express');
 var bodyParser = require('body-parser');
 var CryptoJS = require("crypto-js");
@@ -8,22 +8,21 @@ var nodemailer = require('nodemailer');
 var path = require('path');
 var session = require('express-session');
 
-const config = require('./config.js');
 var mysql = require('./dbcon.js');
-const AuthService = require('./auth-service.js');
+var AuthService = require('./auth-service.js');
+var { PORT, APP_SECRET, CRYPTO_SECRET } = require('./config.js');
 
 // Set up the server:
-
 var app = express();
 
 app.use(session({
-  secret: config.appSecret,
+  secret: APP_SECRET,
   resave: true,
   saveUninitialized: true
 }));
 app.use(bodyParser.urlencoded({extended:true}));
 app.set('view engine', 'handlebars');
-app.set('port', process.argv[2]);
+app.set('port', PORT);
 
 var handlebars = require('express-handlebars').create({
   helpers: {
@@ -244,7 +243,7 @@ app.get('/reset/:token', function(req, res) {
 // POST request that is called when user has changes their password
 app.post('/reset-password', function(req, res, next) {
   // convert the plaintext password string to encrypted hash password with CryptoJS
-  var ciphertext = CryptoJS.AES.encrypt(req.body.password, config.cryptoSecret).toString();
+  var ciphertext = CryptoJS.AES.encrypt(req.body.password, CRYPTO_SECRET).toString();
 
   // update the users table with the new password and force the token to expire so no longer valid URL
   var sql = "UPDATE users SET password = ?, tokenExpiration = ? WHERE id = ?";
@@ -283,7 +282,7 @@ app.post('/add-new-user', function(req, res) {
       }
       // we have a new user password we need to hash then add to the db
       else {
-        var ciphertext = CryptoJS.AES.encrypt(req.body.user_password, config.cryptoSecret).toString();
+        var ciphertext = CryptoJS.AES.encrypt(req.body.user_password, CRYPTO_SECRET).toString();
         // console.log(ciphertext);
         mysql.pool.query(
           "INSERT INTO users (name, email, password) VALUES (?,?,?)",
