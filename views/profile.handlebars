@@ -16,6 +16,9 @@
     <div class="profile">
         <form action="/profile/edit" method="post">
         <h4>Profile</h4>
+        {{#if errors}}
+					<div id='danger'>{{errors}}</div>
+		{{/if}}
             <div class="form-row">
 				<div class="form-group col-md-12">
                     <label>Name</label>
@@ -32,6 +35,9 @@
 				<div class="form-group col-md-12">
                     <label>New Password</label>
                     <input class="form-control" name="password" type="password" />
+                    <input type="hidden" value={{userId}} name="id" />
+                    <input type="hidden" value={{email}} name="original_email" />
+                    <input type="hidden" value={{name}} name="original_name" />
                 </div>
              </div>
              <button type="submit" class="btn btn-primary">Update Profile</button>
