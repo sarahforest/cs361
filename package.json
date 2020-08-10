@@ -10,7 +10,7 @@
     "dev-forever": "./node_modules/forever/bin/forever index.js"
   },
   "engines": {
-    "node": "12.14.0"
+    "node": "10.13.0"
   },
   "repository": {
     "type": "git",
