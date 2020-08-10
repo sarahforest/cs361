@@ -57,3 +57,15 @@ See "EC3_DDL.sql".
     email: 'test1@test.com'
   }
   ```
+## Documentation
+
+Make sure you run ```npm install``` to install jsdoc (it is listed in package.json)
+
+Navigate to the jsdoc folder. ```mkdir jsdoc && cd $_``` if it does not exist
+
+Running the documentation generator on the command line
+```../node_modules/jsdoc/jsdoc.js ../index.js``` (path to jsdoc.js) (path to yourFile.js)
+
+This command will create a directory named out/ in the current working directory. Within that directory, you will find the generated HTML pages (e.g. yourFile.html).
+
+[JSDOC Documentation](https://jsdoc.app/)

@@ -1,5 +1,33 @@
-// Require necessary packages/files:
-require('dotenv').config();
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: index.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: index.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// Require necessary packages/files:
+
 var express = require('express');
 var bodyParser = require('body-parser');
 var CryptoJS = require("crypto-js");
@@ -8,21 +36,22 @@ var nodemailer = require('nodemailer');
 var path = require('path');
 var session = require('express-session');
 
+const config = require('./config.js');
 var mysql = require('./dbcon.js');
-var AuthService = require('./auth-service.js');
-var { PORT, APP_SECRET, CRYPTO_SECRET } = require('./config.js');
+const AuthService = require('./auth-service.js');
 
 // Set up the server:
+
 var app = express();
 
 app.use(session({
-  secret: APP_SECRET,
+  secret: config.appSecret,
   resave: true,
   saveUninitialized: true
 }));
 app.use(bodyParser.urlencoded({extended:true}));
 app.set('view engine', 'handlebars');
-app.set('port', PORT);
+app.set('port', process.argv[2]);
 
 var handlebars = require('express-handlebars').create({
   helpers: {
@@ -40,16 +69,16 @@ var handlebars = require('express-handlebars').create({
               return (v1 != v2) ? options.fn(this) : options.inverse(this);
           case '!==':
               return (v1 !== v2) ? options.fn(this) : options.inverse(this);
-          case '<':
-              return (v1 < v2) ? options.fn(this) : options.inverse(this);
-          case '<=':
-              return (v1 <= v2) ? options.fn(this) : options.inverse(this);
+          case '&lt;':
+              return (v1 &lt; v2) ? options.fn(this) : options.inverse(this);
+          case '&lt;=':
+              return (v1 &lt;= v2) ? options.fn(this) : options.inverse(this);
           case '>':
               return (v1 > v2) ? options.fn(this) : options.inverse(this);
           case '>=':
               return (v1 >= v2) ? options.fn(this) : options.inverse(this);
-          case '&&':
-              return (v1 && v2) ? options.fn(this) : options.inverse(this);
+          case '&amp;&amp;':
+              return (v1 &amp;&amp; v2) ? options.fn(this) : options.inverse(this);
           case '||':
               return (v1 || v2) ? options.fn(this) : options.inverse(this);
           default:
@@ -275,7 +304,7 @@ app.get('/reset/:token', function(req, res) {
 /** POST request that is called when user has changes their password */
 app.post('/reset-password', function(req, res, next) {
   // convert the plaintext password string to encrypted hash password with CryptoJS
-  var ciphertext = CryptoJS.AES.encrypt(req.body.password, CRYPTO_SECRET).toString();
+  var ciphertext = CryptoJS.AES.encrypt(req.body.password, config.cryptoSecret).toString();
 
   // update the users table with the new password and force the token to expire so no longer valid URL
   var sql = "UPDATE users SET password = ?, tokenExpiration = ? WHERE id = ?";
@@ -307,14 +336,14 @@ app.post('/add-new-user', function(req, res) {
         res.end();
       }
       // if id exists in the db, user already exists, don't proceed with sign up
-      else if (result[0] && result[0].id) {
+      else if (result[0] &amp;&amp; result[0].id) {
         res.render('signup', {
           errors: 'Email address already exists. Please login to your existing account or use a different email.',
         });
       }
       // we have a new user password we need to hash then add to the db
       else {
-        var ciphertext = CryptoJS.AES.encrypt(req.body.user_password, CRYPTO_SECRET).toString();
+        var ciphertext = CryptoJS.AES.encrypt(req.body.user_password, config.cryptoSecret).toString();
         // console.log(ciphertext);
         mysql.pool.query(
           "INSERT INTO users (name, email, password) VALUES (?,?,?)",
@@ -354,3 +383,26 @@ app.use(function(err, req, res, next){
 app.listen(app.get('port'), function(){
   console.log('Express started on http://localhost:' + app.get('port') + '; press Ctrl-C to terminate.');
 });
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#checkIfUserExists">checkIfUserExists</a></li><li><a href="global.html#getToken">getToken</a></li><li><a href="global.html#sendPasswordReset">sendPasswordReset</a></li><li><a href="global.html#updateUserTokens">updateUserTokens</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.5</a> on Sun Aug 09 2020 17:32:11 GMT-0400 (Eastern Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
