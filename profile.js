@@ -39,7 +39,7 @@ router.post('/edit', requireAuth, function(req, res) {
         }
         else {
             if (req.body.password !== '') {
-                var ciphertext = CryptoJS.AES.encrypt(req.body.password, config.cryptoSecret).toString();
+                var ciphertext = CryptoJS.AES.encrypt(req.body.password, config.CRYPTO_SECRET).toString();
 
                 sql = "UPDATE users " + 
                 "SET name = ?, " + 
